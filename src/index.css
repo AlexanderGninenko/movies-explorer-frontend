@@ -1,0 +1,11 @@
+@import './vendor/normalize.css';
+@import './vendor/fonts/fonts.css';
+
+@import './components/App/App.css';
+@import './components/Main/Main.css';
+
+@import './components/Header/Header.css';
+@import './components/Navigation/Navigation.css';
+@import './components/Main/Promo/Promo.css';
+@import './components/Main/AboutProject/AboutProject.css';
+@import './components/Main/Techs/Techs.css';

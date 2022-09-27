@@ -1,0 +1,42 @@
+.navigation {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.navigation__auth {
+    display: flex;
+}
+
+.navigation__login {
+    display: flex;
+    width: 76px;
+    height: 32px;
+    background: #2BE080;
+    border-radius: 3px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    text-decoration: none;
+    color: #000;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+}
+
+.navigation__register {
+    display: flex;
+    font-family: 'Inter', Arial, sans-serif;;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    text-decoration: none;
+    color: #fff;
+    margin-right: 30px;
+    align-items: center;
+    justify-content: center;
+}
