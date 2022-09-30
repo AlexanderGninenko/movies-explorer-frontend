@@ -9,3 +9,7 @@
 @import './components/Main/Promo/Promo.css';
 @import './components/Main/AboutProject/AboutProject.css';
 @import './components/Main/Techs/Techs.css';
+@import './components/Main/AboutMe/AboutMe.css';
+@import './components/Main/Portfolio/Portfolio.css';
+@import './components/Footer/Footer.css';
+@import './components/AuthWithForm/AuthWithForm.css';

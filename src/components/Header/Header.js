@@ -4,7 +4,6 @@ import Navigation from "../Navigation/Navigation";
 
 function Header({ loggedIn }) {
   const location = useLocation();
-  console.log(location);
 
   return (
     <header

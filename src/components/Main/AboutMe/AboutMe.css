@@ -1,0 +1,79 @@
+.about-me {
+    padding: 0 70px;
+    /* position: relative; */
+}
+.about-me__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.about-me__photo {
+    /* position: absolute; */
+    top: 227px;
+    right: 70px;
+    width: 270px;
+    height: 327px;
+    border-radius: 10px;
+}
+
+.about-me__title {
+    width: 100%;
+    margin: 0 0 66px 0;
+    padding: 110px 0 23px 0;
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 27px;
+    letter-spacing: -0.04em;
+    color: #000000;
+    border-bottom: 1px solid #000;
+}
+
+.about-me__status {
+    margin: 0;
+    padding: 0 0 26px 0;
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 20px;
+    color: #000000;
+}
+
+.about-me__name {
+    margin: 0;
+    padding: 0 0 18px 0;
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 50px;
+    line-height: 58px;
+    letter-spacing: -0.04em;
+    color: #000000;
+}
+
+.about-me__description {
+    margin: 0;
+    max-width: 600px;
+    padding: 0 0 99px 0;
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    color: #000000;
+}
+
+.about-me__github {
+    padding: 0;
+    margin: 0;
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    color: #000000;
+    text-decoration: none;
+}
