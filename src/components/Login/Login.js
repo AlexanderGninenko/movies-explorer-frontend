@@ -5,12 +5,11 @@ const Login = ({ onLogin, isLoading }) => {
     <AuthWithForm
       title="Рады видеть!"
       onAuth={onLogin}
+      isLoading={isLoading}
       text="Ещё не зарегистрированы?"
-      buttonText="Регистрация"
+      linkText="Регистрация"
+      buttonText='Войти'
     >
-      <button className="auth__button" type="submit" disabled={isLoading}>
-        {isLoading ? "Входим..." : "Войти"}
-      </button>
     </AuthWithForm>
   );
 };

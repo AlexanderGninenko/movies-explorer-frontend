@@ -1,12 +1,11 @@
 import React from "react";
 import { Route, Switch, useHistory, withRouter } from "react-router-dom";
-import Header from "../Header/Header";
 import Main from "../Main/Main";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import Register from '../Register/Register';
 import Login from '../Login/Login';
-import Footer from "../Footer/Footer";
 import * as auth from "../../utils/AuthAPI";
+import InfoTooltip from "../InfoTooltip/InfoTooltip";
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
@@ -31,6 +30,31 @@ function App() {
   const [email, setEmail] = React.useState("");
 
   const history = useHistory();
+
+  const handleRegistration = (name, password, email) => {
+    setIsRenderLoading(true);
+    auth
+      .register(name, password, email)
+      .then(() => {
+        setInfoTooltipData({
+          image: "success",
+          message: "Вы успешно зарегистрировались!",
+        });
+        history.push("/signin");
+      })
+      .catch((e) => {
+        console.log(e);
+        setInfoTooltipData({
+          image: "fail",
+          message: "Что-то пошло не так! Попробуйте ещё раз.",
+        });
+      })
+      .finally(() => {
+        setIsInfoTooltipOpen(true);
+        setIsRenderLoading(false);
+      });
+  };
+
 
   const handleAuthorization = (password, email) => {
     setIsRenderLoading(true);
@@ -57,22 +81,25 @@ function App() {
       });
   };
 
+  const closeAllPopups = () => {
+    setIsInfoTooltipOpen(false);
+  };
+
 
   return (
     <Switch>
       <div className="app">
-        <Header loggedIn={loggedIn}/>
         <Route
             exact
             path="/">
-            <Main />
+            <Main loggedIn={loggedIn} />
             </Route>
             
         <Route path="/signup/">
-            {/* <Register
-            //   onRegister={handleRegistration}
-            //   isLoading={isRenderLoading}
-            /> */}
+            <Register
+              onRegister={handleRegistration}
+              isLoading={isRenderLoading}
+            />
           </Route>
           <Route path="/signin">
             <Login
@@ -83,7 +110,11 @@ function App() {
           <Route path="/movies/">
 
           </Route>
-          <Footer />
+          <InfoTooltip
+            isOpen={isInfoTooltipOpen}
+            data={infoTooltipData}
+            onClose={closeAllPopups}
+          />
       </div>
     </Switch>
   );

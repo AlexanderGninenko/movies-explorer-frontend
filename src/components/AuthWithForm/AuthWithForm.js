@@ -1,7 +1,18 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import logo from "../../images/logo.svg";
 
-const AuthWithForm = ({ title, onAuth, text, buttonText, children }) => {
+const AuthWithForm = ({
+  title,
+  isLoading,
+  onAuth,
+  text,
+  linkText,
+  buttonText,
+  children,
+}) => {
+  const location = useLocation();
+
   const [values, setValues] = useState({});
 
   useEffect(() => setValues({}), []);
@@ -16,13 +27,32 @@ const AuthWithForm = ({ title, onAuth, text, buttonText, children }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onAuth(values.password, values.email);
+    onAuth(values.name, values.password, values.email);
   };
 
   return (
     <form onSubmit={handleSubmit} className="auth">
+      <img className="auth__logo" src={logo} alt="Логотип" />
       <h1 className="auth__title">{title}</h1>
-      <label htmlFor="email">E-mail</label>
+      {location.pathname === "/signup" && (
+        <>
+          <label className="auth__label" htmlFor="name">
+            Имя
+          </label>
+          <input
+            id="name"
+            name="name"
+            onChange={handleChange}
+            value={values.name || ""}
+            className="auth__input"
+            type="name"
+            required
+          />
+        </>
+      )}
+      <label className="auth__label" htmlFor="email">
+        E-mail
+      </label>
       <input
         id="email"
         name="email"
@@ -32,8 +62,9 @@ const AuthWithForm = ({ title, onAuth, text, buttonText, children }) => {
         type="email"
         required
       />
-      <label htmlFor="password">Пароль</label>
-
+      <label className="auth__label" htmlFor="password">
+        Пароль
+      </label>
       <input
         id="password"
         name="password"
@@ -43,11 +74,13 @@ const AuthWithForm = ({ title, onAuth, text, buttonText, children }) => {
         type="password"
         required
       />
-      {children}
-      <span className="auth__sign-in">
+      <button className="auth__button" type="submit" disabled={isLoading}>
+        {buttonText}
+      </button>
+      <span className="auth__sign">
         {text}
         <Link className="auth__sign-in" to="/sign-in">
-          {buttonText}
+          {linkText}
         </Link>
       </span>
     </form>
