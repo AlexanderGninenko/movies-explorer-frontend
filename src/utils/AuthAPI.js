@@ -1,4 +1,6 @@
-const BASE_URL = "https://moviessearcher.nomorepartiesxyz.ru/api/";
+const BASE_URL = "https://moviessearcher.nomorepartiesxyz.ru/api";
+// const BASE_URL = "http://localhost:4010/api";
+
 
 const checkResponse = (res) => {
   if (res.ok) {
@@ -9,6 +11,7 @@ const checkResponse = (res) => {
 
 export const register = (name, password, email) => {
   return fetch(`${BASE_URL}/signup`, {
+    credentials: "include",
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -1,21 +1,24 @@
 import React from "react";
-import { Route, Switch, useHistory, withRouter } from "react-router-dom";
-import Main from "../Main/Main";
+import {
+  Redirect,
+  Route,
+  Switch,
+  useHistory,
+  withRouter,
+} from "react-router-dom";
+import Main from "./../Main/Main";
+import Movies from "../Movies/Movies";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
-import Register from '../Register/Register';
-import Login from '../Login/Login';
+import Register from "../Register/Register";
+import Login from "../Login/Login";
 import * as auth from "../../utils/AuthAPI";
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
+import Profile from "./../Profile/Profile";
+import { LoggedInContext } from "./../../contexts/LoggedInContext";
 
 function App() {
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
-    React.useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
-    React.useState(false);
   const [isConfirmDeletePopupOpen, setIsConfirmDeletePopupOpen] =
     React.useState(false);
-  const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
   const [infoTooltipData, setInfoTooltipData] = React.useState({});
 
@@ -30,6 +33,42 @@ function App() {
   const [email, setEmail] = React.useState("");
 
   const history = useHistory();
+
+  React.useEffect(() => {
+    tokenCheck();
+
+    // if (loggedIn) {
+    //   api
+    //     .getInitialCards()
+    //     .then((cards) => {
+    //       setCards(cards.reverse());
+    //     })
+    //     .catch((err) => console.log(err));
+
+    //   api
+    //     .getUserInfo()
+    //     .then((user) => {
+    //       setCurrentUser(user);
+    //     })
+    //     .catch((err) => console.log(err));
+    // }
+  }, [loggedIn]);
+
+  const tokenCheck = () => {
+    auth
+      .getMyUser()
+      .then((res) => {
+        if (res) {
+          console.log(res)
+          setLoggedIn(true);
+          setEmail(res.email);
+          setCurrentUser(res.name);
+          history.push("/movies");
+        }
+      })
+      .catch((err) => console.log(err));
+};
+
 
   const handleRegistration = (name, password, email) => {
     setIsRenderLoading(true);
@@ -55,7 +94,6 @@ function App() {
       });
   };
 
-
   const handleAuthorization = (password, email) => {
     setIsRenderLoading(true);
     auth
@@ -63,8 +101,9 @@ function App() {
       .then((data) => auth.getMyUser(data))
       .then((res) => {
         if (res) {
-          setEmail(res.data.email);
+          setEmail(res.email);
           setLoggedIn(true);
+          history.push('/movies');
         }
       })
       .catch((e) => {
@@ -77,7 +116,6 @@ function App() {
       })
       .finally(() => {
         setIsRenderLoading(false);
-        
       });
   };
 
@@ -85,37 +123,69 @@ function App() {
     setIsInfoTooltipOpen(false);
   };
 
+  const signOut = () => {
+    auth
+      .signOut()
+      .then(() => {
+        setLoggedIn(false);
+        setInfoTooltipData({
+          image: "success",
+          message: "Вы успешно вышли",
+        });
+        history.push("/signin");
+      })
+      .catch((e) => {
+        console.log(e);
+        setInfoTooltipData({
+          image: "fail",
+          message: "Что-то пошло не так! Попробуйте ещё раз.",
+        });
+      })
+      .finally(() => {
+        setIsInfoTooltipOpen(true);
+      });
+  };
+
+  console.log(loggedIn);
 
   return (
     <Switch>
-      <div className="app">
-        <Route
-            exact
-            path="/">
-            <Main loggedIn={loggedIn} />
-            </Route>
-            
-        <Route path="/signup/">
+      <LoggedInContext.Provider value={loggedIn}>
+        <div className="app">
+
+          <Route exact path="/">
+            <Main />
+          </Route>
+
+          <ProtectedRoute
+            path="/movies"
+            loggedIn={loggedIn}
+            component={Movies}
+          ></ProtectedRoute>
+
+          <ProtectedRoute
+            path="/profile"
+            loggedIn={loggedIn}
+            component={Profile}
+            onSignOut={signOut}
+          ></ProtectedRoute>
+
+          <Route path="/signup/">
             <Register
               onRegister={handleRegistration}
               isLoading={isRenderLoading}
             />
           </Route>
           <Route path="/signin">
-            <Login
-              onLogin={handleAuthorization}
-              isLoading={isRenderLoading}
-            />
-          </Route>
-          <Route path="/movies/">
-
+            <Login onLogin={handleAuthorization} isLoading={isRenderLoading} />
           </Route>
           <InfoTooltip
             isOpen={isInfoTooltipOpen}
             data={infoTooltipData}
             onClose={closeAllPopups}
           />
-      </div>
+        </div>
+      </LoggedInContext.Provider>
     </Switch>
   );
 }

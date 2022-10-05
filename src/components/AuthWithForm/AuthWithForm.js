@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../../images/logo.svg";
+import Header from "../Header/Header";
 
 const AuthWithForm = ({
   title,
@@ -9,7 +10,7 @@ const AuthWithForm = ({
   text,
   linkText,
   buttonText,
-  children,
+  
 }) => {
   const location = useLocation();
 
@@ -25,13 +26,18 @@ const AuthWithForm = ({
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleRegisterSubmit = (e) => {
     e.preventDefault();
     onAuth(values.name, values.password, values.email);
   };
 
+  const handleLoginSubmit = (e) => {
+    e.preventDefault();
+    onAuth(values.password, values.email);
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="auth">
+    <form onSubmit={location.pathname === "/signup" ? handleRegisterSubmit : handleLoginSubmit} className="auth">
       <img className="auth__logo" src={logo} alt="Логотип" />
       <h1 className="auth__title">{title}</h1>
       {location.pathname === "/signup" && (

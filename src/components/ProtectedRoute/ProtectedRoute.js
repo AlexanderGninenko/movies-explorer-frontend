@@ -1,11 +1,10 @@
-import { Redirect, Route, useLocation } from "react-router-dom";
+import { Redirect, Route } from "react-router-dom";
 
 const ProtectedRoute = ({ component: Component, ...props }) => {
-    const location = useLocation();
     return (
       <Route>
-        {() =>
-          !props.loggedIn ? <Component {...props}/> : <Redirect to='/signin'/>  
+        {
+          props.loggedIn ? <Component {...props}/> : <Redirect to='/' />
         }
       </Route>
     );

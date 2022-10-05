@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 
 
 function Navigation({ loggedIn }) {
+
+  console.log(loggedIn)
   return (
     <nav className="navigation">
       {loggedIn ? (

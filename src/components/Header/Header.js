@@ -1,10 +1,14 @@
+import { React, useContext } from 'react';
 import logo from "../../images/logo.svg";
 import { Link, useLocation } from "react-router-dom";
 import Navigation from "../Navigation/Navigation";
+import { LoggedInContext } from './../../contexts/LoggedInContext';
 
-function Header({ loggedIn }) {
+
+function Header() {
+  const loggedIn = useContext(LoggedInContext);
   const location = useLocation();
-
+  console.log(loggedIn)
   return (
     <header
       className={`header ${loggedIn ? "header_light-theme" : ""} ${

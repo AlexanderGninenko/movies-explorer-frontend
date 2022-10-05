@@ -1,6 +1,6 @@
 import AuthWithForm from "../AuthWithForm/AuthWithForm";
 
-const Login = ({ onLogin, isLoading }) => {
+const Login = ({ onLogin, isLoading, loggedIn }) => {
   return (
     <AuthWithForm
       title="Рады видеть!"
@@ -9,6 +9,7 @@ const Login = ({ onLogin, isLoading }) => {
       text="Ещё не зарегистрированы?"
       linkText="Регистрация"
       buttonText='Войти'
+      
     >
     </AuthWithForm>
   );
