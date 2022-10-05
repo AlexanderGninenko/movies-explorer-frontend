@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 function Navigation({ loggedIn }) {
 
-  console.log(loggedIn)
   return (
     <nav className="navigation">
       {loggedIn ? (
@@ -18,7 +17,6 @@ function Navigation({ loggedIn }) {
             Аккаунт
         </Link>
         </div>
-        // <UserInfo email={email} loggedIn={loggedIn} onSignOut={onSignOut} />
       ) : (
         <div className="navigation__auth">
           <Link className="navigation__register" to="/signup">

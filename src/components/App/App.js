@@ -1,20 +1,21 @@
-import React from "react";
+import React from 'react';
 import {
   Redirect,
   Route,
   Switch,
   useHistory,
   withRouter,
-} from "react-router-dom";
-import Main from "./../Main/Main";
-import Movies from "../Movies/Movies";
-import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
-import Register from "../Register/Register";
-import Login from "../Login/Login";
-import * as auth from "../../utils/AuthAPI";
-import InfoTooltip from "../InfoTooltip/InfoTooltip";
-import Profile from "./../Profile/Profile";
-import { LoggedInContext } from "./../../contexts/LoggedInContext";
+} from 'react-router-dom';
+import Main from './../Main/Main';
+import Movies from '../Movies/Movies';
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import Register from '../Register/Register';
+import Login from '../Login/Login';
+import * as auth from '../../utils/AuthAPI';
+import InfoTooltip from '../InfoTooltip/InfoTooltip';
+import Profile from './../Profile/Profile';
+import { LoggedInContext } from './../../contexts/LoggedInContext';
+import { CurrentUserContext } from './../../contexts/CurrentUserContext';
 
 function App() {
   const [isConfirmDeletePopupOpen, setIsConfirmDeletePopupOpen] =
@@ -30,7 +31,7 @@ function App() {
   const [cards, setCards] = React.useState([]);
   const [loggedIn, setLoggedIn] = React.useState(false);
 
-  const [email, setEmail] = React.useState("");
+  const [email, setEmail] = React.useState('');
 
   const history = useHistory();
 
@@ -59,16 +60,12 @@ function App() {
       .getMyUser()
       .then((res) => {
         if (res) {
-          console.log(res)
           setLoggedIn(true);
-          setEmail(res.email);
-          setCurrentUser(res.name);
-          history.push("/movies");
+          setCurrentUser({ email: res.email, name: res.name });
         }
       })
       .catch((err) => console.log(err));
-};
-
+  };
 
   const handleRegistration = (name, password, email) => {
     setIsRenderLoading(true);
@@ -76,16 +73,16 @@ function App() {
       .register(name, password, email)
       .then(() => {
         setInfoTooltipData({
-          image: "success",
-          message: "Вы успешно зарегистрировались!",
+          image: 'success',
+          message: 'Вы успешно зарегистрировались!',
         });
-        history.push("/signin");
+        history.push('/signin');
       })
       .catch((e) => {
         console.log(e);
         setInfoTooltipData({
-          image: "fail",
-          message: "Что-то пошло не так! Попробуйте ещё раз.",
+          image: 'fail',
+          message: 'Что-то пошло не так! Попробуйте ещё раз.',
         });
       })
       .finally(() => {
@@ -101,7 +98,7 @@ function App() {
       .then((data) => auth.getMyUser(data))
       .then((res) => {
         if (res) {
-          setEmail(res.email);
+          setCurrentUser({ email: res.email, name: res.name });
           setLoggedIn(true);
           history.push('/movies');
         }
@@ -109,8 +106,8 @@ function App() {
       .catch((e) => {
         console.log(e);
         setInfoTooltipData({
-          image: "fail",
-          message: "Что-то пошло не так! Попробуйте ещё раз.",
+          image: 'fail',
+          message: 'Что-то пошло не так! Попробуйте ещё раз.',
         });
         setIsInfoTooltipOpen(true);
       })
@@ -129,16 +126,16 @@ function App() {
       .then(() => {
         setLoggedIn(false);
         setInfoTooltipData({
-          image: "success",
-          message: "Вы успешно вышли",
+          image: 'success',
+          message: 'Вы успешно вышли',
         });
-        history.push("/signin");
+        history.push('/signin');
       })
       .catch((e) => {
         console.log(e);
         setInfoTooltipData({
-          image: "fail",
-          message: "Что-то пошло не так! Попробуйте ещё раз.",
+          image: 'fail',
+          message: 'Что-то пошло не так! Попробуйте ещё раз.',
         });
       })
       .finally(() => {
@@ -146,45 +143,53 @@ function App() {
       });
   };
 
-  console.log(loggedIn);
-
   return (
     <Switch>
       <LoggedInContext.Provider value={loggedIn}>
-        <div className="app">
+        <CurrentUserContext.Provider value={currentUser}>
+          <div className='app'>
+            <Route exact path='/'>
+              <Main />
+            </Route>
+            <Route path='/movies'>
+              {loggedIn ? <Movies /> : <Redirect to='/' />}
+            </Route>
+            <Route path='/profile'>
+              {loggedIn ? <Profile onSignOut={signOut} /> : <Redirect to='/' />}
+            </Route>
 
-          <Route exact path="/">
-            <Main />
-          </Route>
-
-          <ProtectedRoute
+            {/* <ProtectedRoute
             path="/movies"
             loggedIn={loggedIn}
             component={Movies}
-          ></ProtectedRoute>
+          ><Movies /></ProtectedRoute>
 
           <ProtectedRoute
             path="/profile"
             loggedIn={loggedIn}
             component={Profile}
             onSignOut={signOut}
-          ></ProtectedRoute>
+          ><Profile /></ProtectedRoute> */}
 
-          <Route path="/signup/">
-            <Register
-              onRegister={handleRegistration}
-              isLoading={isRenderLoading}
+            <Route path='/signup/'>
+              <Register
+                onRegister={handleRegistration}
+                isLoading={isRenderLoading}
+              />
+            </Route>
+            <Route path='/signin'>
+              <Login
+                onLogin={handleAuthorization}
+                isLoading={isRenderLoading}
+              />
+            </Route>
+            <InfoTooltip
+              isOpen={isInfoTooltipOpen}
+              data={infoTooltipData}
+              onClose={closeAllPopups}
             />
-          </Route>
-          <Route path="/signin">
-            <Login onLogin={handleAuthorization} isLoading={isRenderLoading} />
-          </Route>
-          <InfoTooltip
-            isOpen={isInfoTooltipOpen}
-            data={infoTooltipData}
-            onClose={closeAllPopups}
-          />
-        </div>
+          </div>
+        </CurrentUserContext.Provider>
       </LoggedInContext.Provider>
     </Switch>
   );

@@ -8,7 +8,6 @@ import { LoggedInContext } from './../../contexts/LoggedInContext';
 function Header() {
   const loggedIn = useContext(LoggedInContext);
   const location = useLocation();
-  console.log(loggedIn)
   return (
     <header
       className={`header ${loggedIn ? "header_light-theme" : ""} ${
