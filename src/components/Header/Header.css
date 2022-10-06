@@ -1,6 +1,11 @@
 .header {
     background-color: #073042;
     display: flex;
+    align-items: center;
     margin: 0 auto;
     padding: 18px 70px;
+}
+
+.header_light-theme {
+    background-color: transparent;
 }

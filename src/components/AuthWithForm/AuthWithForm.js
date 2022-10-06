@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../../images/logo.svg";
-import Header from "../Header/Header";
 
 const AuthWithForm = ({
   title,

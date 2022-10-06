@@ -1,12 +1,17 @@
 .navigation {
     width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
 }
 
-.navigation__auth {
+.navigation__not-loggedin {
     display: flex;
+    justify-content: flex-end;
+}
+
+.navigation__loggedin {
+    display: flex;
+    margin: 0 0 0 44px;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .navigation__login {
@@ -29,7 +34,7 @@
 
 .navigation__register {
     display: flex;
-    font-family: 'Inter', Arial, sans-serif;;
+    font-family: 'Inter', Arial, sans-serif;
     font-style: normal;
     font-weight: 500;
     font-size: 12px;
@@ -39,4 +44,54 @@
     margin-right: 30px;
     align-items: center;
     justify-content: center;
+}
+
+.navigation__movies-block {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.navigation__movies {
+    font-family: 'Inter', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 18px;
+    color: #000000;
+    text-decoration: none;
+    margin: 0 16px 0 0;
+    padding: 0;
+}
+
+.navigation__saved-movies {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 18px;
+    color: #000000;
+    text-decoration: none;
+}
+
+.navigation__account-block {
+    width: 100px;
+    height: 32px;
+    background: #F9F9F9;
+    border-radius: 20px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000000;
+}
+
+.navigation__profile-link {
+    text-decoration: none;
+    color: #000000;
 }

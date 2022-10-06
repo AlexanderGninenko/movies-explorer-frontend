@@ -34,11 +34,12 @@ function Profile({ onSignOut, onUpdateUser }) {
   }
 
   return (
-    <div className='profile'>
+    <>
       <Header />
-      <form onSubmit={editProfile} className='profile__form'>
+
+      <form onSubmit={editProfile} className='profile'>
         <h1 className='proifle__title'>Привет, {currentUser.name}!</h1>
-        <div className='profile__name'>
+        <div className='profile__block'>
           <label className='profile__label' htmlFor='name'>
             Имя
           </label>
@@ -52,7 +53,7 @@ function Profile({ onSignOut, onUpdateUser }) {
             required
           ></input>
         </div>
-        <div className='profile__email'>
+        <div className='profile__block'>
           <label className='profile__label' htmlFor='email'>
             Email
           </label>
@@ -66,14 +67,14 @@ function Profile({ onSignOut, onUpdateUser }) {
             required
           ></input>
         </div>
-        <button className='profile__edit' type='submit'>
+        <button className='profile__button' type='submit'>
           Редактировать
         </button>
-        <button onClick={onSignOut} className='profile__edit' type='button'>
+        <button onClick={onSignOut} className='profile__button' type='button'>
           Выйти из аккаунта
         </button>
       </form>
-    </div>
+    </>
   );
 }
 

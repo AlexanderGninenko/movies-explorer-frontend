@@ -4,6 +4,9 @@
 @import './components/App/App.css';
 @import './components/Main/Main.css';
 
+@import './components/NotFound/NotFound.css';
+
+@import './components/Preloader/Preloader.css';
 @import './components/Header/Header.css';
 @import './components/Navigation/Navigation.css';
 @import './components/Main/Promo/Promo.css';

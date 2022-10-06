@@ -59,3 +59,13 @@ export const getMyUser = () => {
     .then((data) => data)
     .catch((err) => console.log(err));
 };
+
+export const updateUserInfo = ({name, email}) => {
+  return fetch(`${BASE_URL}/users/me`, {
+    credentials: "include",
+    method: 'PATCH',
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ name, email })
+  })
+  .then(checkResponse)
+};

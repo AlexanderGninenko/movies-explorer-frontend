@@ -8,7 +8,6 @@ import {
 } from 'react-router-dom';
 import Main from './../Main/Main';
 import Movies from '../Movies/Movies';
-import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
 import * as auth from '../../utils/AuthAPI';
@@ -16,6 +15,9 @@ import InfoTooltip from '../InfoTooltip/InfoTooltip';
 import Profile from './../Profile/Profile';
 import { LoggedInContext } from './../../contexts/LoggedInContext';
 import { CurrentUserContext } from './../../contexts/CurrentUserContext';
+import Preloader from './../Preloader/Preloader';
+import NotFound from '../NotFound/NotFound';
+import ProtectedRoute from './../ProtectedRoute/ProtectedRoute';
 
 function App() {
   const [isConfirmDeletePopupOpen, setIsConfirmDeletePopupOpen] =
@@ -34,8 +36,11 @@ function App() {
   const [email, setEmail] = React.useState('');
 
   const history = useHistory();
+  const localToken = localStorage.getItem('token');
+  console.log(localToken)
 
   React.useEffect(() => {
+    
     tokenCheck();
 
     // if (loggedIn) {
@@ -56,6 +61,7 @@ function App() {
   }, [loggedIn]);
 
   const tokenCheck = () => {
+    console.log(loggedIn);
     auth
       .getMyUser()
       .then((res) => {
@@ -95,12 +101,13 @@ function App() {
     setIsRenderLoading(true);
     auth
       .authorization(password, email)
-      .then((data) => auth.getMyUser(data))
+      .then((data)=>localStorage.setItem('token', data))
+      .then(() => auth.getMyUser())
       .then((res) => {
         if (res) {
           setCurrentUser({ email: res.email, name: res.name });
           setLoggedIn(true);
-          history.push('/movies');
+          history.push('/profile');
         }
       })
       .catch((e) => {
@@ -121,10 +128,12 @@ function App() {
   };
 
   const signOut = () => {
+    setIsRenderLoading(true);
     auth
       .signOut()
       .then(() => {
         setLoggedIn(false);
+        localStorage.removeItem('token');
         setInfoTooltipData({
           image: 'success',
           message: 'Вы успешно вышли',
@@ -140,37 +149,48 @@ function App() {
       })
       .finally(() => {
         setIsInfoTooltipOpen(true);
+        setIsRenderLoading(false);
       });
   };
 
+  const handleUpdateUserInfo = ({ name, email }) => {
+    setIsRenderLoading(true);
+    auth
+      .updateUserInfo({ name, email })
+      .then((res) => {
+        setCurrentUser({ email: res.data.email, name: res.data.name });
+        setIsRenderLoading(false);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleGoBack = () => {
+    if (loggedIn) {
+      history.goBack();
+    }
+  };
+
   return (
-    <Switch>
-      <LoggedInContext.Provider value={loggedIn}>
-        <CurrentUserContext.Provider value={currentUser}>
-          <div className='app'>
+    <LoggedInContext.Provider value={localToken}>
+      <CurrentUserContext.Provider value={currentUser}>
+        {isRenderLoading && <Preloader />}
+        <div className='app'>
+          <Switch>
             <Route exact path='/'>
               <Main />
             </Route>
-            <Route path='/movies'>
-              {loggedIn ? <Movies /> : <Redirect to='/' />}
-            </Route>
-            <Route path='/profile'>
-              {loggedIn ? <Profile onSignOut={signOut} /> : <Redirect to='/' />}
-            </Route>
-
-            {/* <ProtectedRoute
-            path="/movies"
-            loggedIn={loggedIn}
-            component={Movies}
-          ><Movies /></ProtectedRoute>
-
-          <ProtectedRoute
-            path="/profile"
-            loggedIn={loggedIn}
-            component={Profile}
-            onSignOut={signOut}
-          ><Profile /></ProtectedRoute> */}
-
+            <ProtectedRoute
+              loggedIn={localToken}
+              component={Movies}
+              path='/movies'
+            ></ProtectedRoute>
+            <ProtectedRoute
+              loggedIn={localToken}
+              path='/profile'
+              component={Profile}
+              onSignOut={signOut}
+              onUpdateUser={handleUpdateUserInfo}
+            ></ProtectedRoute>
             <Route path='/signup/'>
               <Register
                 onRegister={handleRegistration}
@@ -183,15 +203,18 @@ function App() {
                 isLoading={isRenderLoading}
               />
             </Route>
-            <InfoTooltip
-              isOpen={isInfoTooltipOpen}
-              data={infoTooltipData}
-              onClose={closeAllPopups}
-            />
-          </div>
-        </CurrentUserContext.Provider>
-      </LoggedInContext.Provider>
-    </Switch>
+            <Route path='*'>
+              <NotFound onGoBack={handleGoBack} />
+            </Route>
+          </Switch>
+          <InfoTooltip
+            isOpen={isInfoTooltipOpen}
+            data={infoTooltipData}
+            onClose={closeAllPopups}
+          />
+        </div>
+      </CurrentUserContext.Provider>
+    </LoggedInContext.Provider>
   );
 }
 
