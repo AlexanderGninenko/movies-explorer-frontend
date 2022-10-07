@@ -3,6 +3,7 @@ import { useEffect, useState, useContext } from 'react';
 import { CurrentUserContext } from './../../contexts/CurrentUserContext';
 
 function Profile({ onSignOut, onUpdateUser }) {
+
   const currentUser = useContext(CurrentUserContext);
 
   const [values, setValues] = useState({});
@@ -37,7 +38,7 @@ function Profile({ onSignOut, onUpdateUser }) {
     <>
       <Header />
 
-      <form onSubmit={editProfile} className='profile'>
+      <form onSubmit={editProfile} className='profile__form form'>
         <h1 className='proifle__title'>Привет, {currentUser.name}!</h1>
         <div className='profile__block'>
           <label className='profile__label' htmlFor='name'>
@@ -48,7 +49,7 @@ function Profile({ onSignOut, onUpdateUser }) {
             name='name'
             onChange={handleChange}
             value={values.name || ''}
-            className='profile__input'
+            className='profile__input form__input'
             type='name'
             required
           ></input>
@@ -62,7 +63,7 @@ function Profile({ onSignOut, onUpdateUser }) {
             name='email'
             onChange={handleChange}
             value={values.email || ''}
-            className='profile__input'
+            className='profile__input form__input'
             type='email'
             required
           ></input>
@@ -70,7 +71,7 @@ function Profile({ onSignOut, onUpdateUser }) {
         <button className='profile__button' type='submit'>
           Редактировать
         </button>
-        <button onClick={onSignOut} className='profile__button' type='button'>
+        <button onClick={onSignOut} className='profile__button form__button' type='button'>
           Выйти из аккаунта
         </button>
       </form>

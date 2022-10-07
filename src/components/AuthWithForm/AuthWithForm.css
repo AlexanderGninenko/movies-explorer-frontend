@@ -1,4 +1,4 @@
-.auth {
+.auth__form {
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -91,4 +91,25 @@
     text-align: center;
     color: #fff;
     cursor: pointer;
+}
+
+.form__input-error {
+    opacity: 0;
+    height: 12px;
+    padding: 0;
+    margin: 0;
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    color: #FF3055;
+}
+
+.form__input-error_active {
+    opacity: 1;
+}
+
+.auth__input-error {
+    color: #FF3055;
 }

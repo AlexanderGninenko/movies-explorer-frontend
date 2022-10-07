@@ -20,7 +20,6 @@ import NotFound from '../NotFound/NotFound';
 import ProtectedRoute from './../ProtectedRoute/ProtectedRoute';
 
 function App() {
-  const [isConfirmDeletePopupOpen, setIsConfirmDeletePopupOpen] =
     React.useState(false);
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
   const [infoTooltipData, setInfoTooltipData] = React.useState({});
@@ -37,7 +36,6 @@ function App() {
 
   const history = useHistory();
   const localToken = localStorage.getItem('token');
-  console.log(localToken)
 
   React.useEffect(() => {
     
@@ -61,7 +59,6 @@ function App() {
   }, [loggedIn]);
 
   const tokenCheck = () => {
-    console.log(loggedIn);
     auth
       .getMyUser()
       .then((res) => {

@@ -1,6 +1,7 @@
 import AuthWithForm from "../AuthWithForm/AuthWithForm";
 
 const Login = ({ onLogin, isLoading, loggedIn }) => {
+
   return (
     <AuthWithForm
       title="Рады видеть!"
@@ -11,6 +12,7 @@ const Login = ({ onLogin, isLoading, loggedIn }) => {
       buttonText='Войти'
       
     >
+      
     </AuthWithForm>
   );
 };
