@@ -1,8 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import logo from '../../images/logo.svg';
 import { useForm } from "react-hook-form";
-import { useState } from 'react';
-import { useEffect } from 'react';
 
 const AuthWithForm = ({
   title,
@@ -47,7 +45,6 @@ const AuthWithForm = ({
             type='name'
             {...register("name", {required: true, minLength : 2, pattern: /^[A-Za-zА-Яа-я]+$/})}
           />
-          <p className={`form__input-error ${errors.name && 'form__input-error_active'} `}>Минимум 2 буквы</p>
         </>
       )}
       <label className='auth__label' htmlFor='email'>
@@ -60,7 +57,6 @@ const AuthWithForm = ({
         type='email'
         {...register("email", { required: true, pattern: /^\w+(\[\+\.-\]?\w)*@\w+(\[\.-\]?\w+)*\.[a-z]+$/i})}
       />
-          {errors.email && <p className='form__input-error'>Введите корректный email</p>}
       <label className='auth__label' htmlFor='password'>
         Пароль
       </label>
@@ -71,9 +67,9 @@ const AuthWithForm = ({
         type='password'
         {...register("password", { required: true, minLength:4})}
       />
-          {errors.password && <p className='form__input-error'>Минимум 4 знака</p>}
+          <p className={`form__input-error ${(errors.name || errors.email || errors.password) && 'form__input-error_active'} `}>Что-то пошло не так...</p>
       <button
-        className='auth__button form__button'
+        className={`auth__button ${location.pathname === '/signin' && 'auth__button-signin'}`}
         type='submit'
         disabled={isLoading}
       >

@@ -11,7 +11,6 @@ import Footer from './../Footer/Footer';
 function Main({ loggedIn }) {
   return (
     <main className="main">
-      <Header loggedIn={loggedIn}/>
       <Promo />
       <AboutProject />
       <Techs />

@@ -5,7 +5,7 @@
 @import './components/Main/Main.css';
 
 @import './components/NotFound/NotFound.css';
-
+@import './components/Header/HamburgerMenu/HamburgerMenu.css';
 @import './components/Preloader/Preloader.css';
 @import './components/Header/Header.css';
 @import './components/Navigation/Navigation.css';
@@ -18,3 +18,8 @@
 @import './components/AuthWithForm/AuthWithForm.css';
 @import './components/InfoTooltip/InfoTooltip.css';
 @import './components/Profile/Profile.css';
+@import './components/Movies/Movies.css';
+@import './components/Movies/MoviesCardList/MoviesCardList.css';
+@import './components/Movies/SearchForm/SearchForm.css';
+@import './components/Movies/MoviesCard/MoviesCard.css';
+@import './components/SavedMovies/SavedMoviesCard/SavedMoviesCard.css';

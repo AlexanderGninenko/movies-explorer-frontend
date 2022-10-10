@@ -1,0 +1,12 @@
+.savedmoviecard__delete-button {
+    background-image: url(../../../images/delete-button.svg);
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    position: relative;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    background-color: transparent;
+}

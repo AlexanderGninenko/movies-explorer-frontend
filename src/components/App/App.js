@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Redirect,
-  Route,
-  Switch,
-  useHistory,
-  withRouter,
-} from 'react-router-dom';
+import { Route, Switch, useHistory, withRouter } from 'react-router-dom';
 import Main from './../Main/Main';
 import Movies from '../Movies/Movies';
 import Register from '../Register/Register';
@@ -18,9 +12,11 @@ import { CurrentUserContext } from './../../contexts/CurrentUserContext';
 import Preloader from './../Preloader/Preloader';
 import NotFound from '../NotFound/NotFound';
 import ProtectedRoute from './../ProtectedRoute/ProtectedRoute';
+import SavedMovies from './../SavedMovies/SavedMovies';
+import Header from '../Header/Header';
 
 function App() {
-    React.useState(false);
+  React.useState(false);
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
   const [infoTooltipData, setInfoTooltipData] = React.useState({});
 
@@ -34,11 +30,12 @@ function App() {
 
   const [email, setEmail] = React.useState('');
 
+  const [isBurgerMenuOpen, setIsBurgerMenuOpen] = React.useState(false);
+
   const history = useHistory();
   const localToken = localStorage.getItem('token');
 
   React.useEffect(() => {
-    
     tokenCheck();
 
     // if (loggedIn) {
@@ -98,7 +95,7 @@ function App() {
     setIsRenderLoading(true);
     auth
       .authorization(password, email)
-      .then((data)=>localStorage.setItem('token', data))
+      .then((data) => localStorage.setItem('token', data))
       .then(() => auth.getMyUser())
       .then((res) => {
         if (res) {
@@ -122,6 +119,7 @@ function App() {
 
   const closeAllPopups = () => {
     setIsInfoTooltipOpen(false);
+    setIsBurgerMenuOpen(false);
   };
 
   const signOut = () => {
@@ -167,11 +165,18 @@ function App() {
     }
   };
 
+  const handleShowBurgerMenu = () => {
+    setIsBurgerMenuOpen(true);
+  }
+
   return (
     <LoggedInContext.Provider value={localToken}>
       <CurrentUserContext.Provider value={currentUser}>
         {isRenderLoading && <Preloader />}
         <div className='app'>
+          <Header onOpenMenu={handleShowBurgerMenu}
+                  isMenuOpen={isBurgerMenuOpen}
+                  onClose={closeAllPopups}/>
           <Switch>
             <Route exact path='/'>
               <Main />
@@ -188,6 +193,12 @@ function App() {
               onSignOut={signOut}
               onUpdateUser={handleUpdateUserInfo}
             ></ProtectedRoute>
+            <ProtectedRoute
+              loggedIn={localToken}
+              component={SavedMovies}
+              path='/saved-movies'
+            ></ProtectedRoute>
+
             <Route path='/signup/'>
               <Register
                 onRegister={handleRegistration}

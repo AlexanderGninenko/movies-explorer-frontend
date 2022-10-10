@@ -32,7 +32,7 @@
     line-height: 50px;
     letter-spacing: -0.04em;
     border-bottom: 1px solid #E8E8E8;
-    
+
 }
 
 .portfolio__list-link {
@@ -52,4 +52,22 @@
 .portfolio__arrow {
     width: 29px;
     height: 60px;
+}
+
+@media screen and (max-width: 768px) {
+    .portfolio {
+        padding: 0 50px;
+    }
+    
+    .portfolio__title {
+        padding-top: 91px;
+    }
+
+    .portfolio__list {
+        padding-bottom: 90px;
+    }
+
+    .portfolio__list-item {
+        font-size: 28px;
+    }
 }

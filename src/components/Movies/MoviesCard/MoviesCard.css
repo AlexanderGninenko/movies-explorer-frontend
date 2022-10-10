@@ -1,0 +1,67 @@
+.moviecard {
+    width: 270px;
+    height: 218px;
+    background: #FDFDFD;
+    box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+}
+
+.moviecard__image {
+    max-height: 151px;
+    width: 100%;
+    margin: 0 0 14px 0;
+    display: flex;
+}
+
+.moviecard__title-block {
+    display: flex;
+    padding: 0 12px 10px 12px;
+}
+
+.moviecard__title {
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 16px;
+    color: #000000;
+    padding: 0;
+    width: 206px;
+    margin: 0 24px 0 0;
+}
+
+.moviecard__save-input {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.09);
+    border-radius: 50%;
+    position: relative;
+}
+
+.moviecard__save-input::before {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: #f9f9f9;
+    border-radius: 50%;
+    top:2px;
+    left: 2px;
+}
+
+.moviecard__save-input:checked::before {
+    background: #2BE080;
+}
+
+.moviecard__duration {
+    margin: 0;
+    padding: 0 0 0 12px;
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 13px;
+    display: flex;
+    color: #A0A0A0;
+}

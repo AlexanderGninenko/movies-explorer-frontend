@@ -1,26 +1,40 @@
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
+import HamburgerMenu from '../Header/HamburgerMenu/HamburgerMenu';
 
-function Navigation({ loggedIn }) {
+function Navigation({ loggedIn, isBurgerMenuOpen, onOpenMenu, onClose }) {
   return (
     <nav className='navigation'>
-      
       {loggedIn ? (
-        <div className='navigation__loggedin'>
-          <div className='navigation__movies-block'>
-            <Link className='navigation__movies' to='/movies'>
-              Фильмы
-            </Link>
-            <Link className='navigation__saved-movies' to='/saved-movies'>
-              Сохраненные фильмы
-            </Link>
+        <>
+          <HamburgerMenu isOpen={isBurgerMenuOpen} onOpenMenu={onOpenMenu} onClose={onClose}/>
+          <div className='navigation__loggedin'>
+            <div className='navigation__movies-block'>
+              <NavLink
+                className='navigation__movies'
+                activeClassName='active-link'
+                to='/movies'
+              >
+                Фильмы
+              </NavLink>
+              <NavLink
+                className='navigation__saved-movies'
+                activeClassName='active-link'
+                to='/saved-movies'
+              >
+                Сохраненные фильмы
+              </NavLink>
+            </div>
+            <div className='navigation__account-block'>
+              <NavLink
+                className='navigation__profile-link'
+                activeClassName='active-link'
+                to='/profile'
+              >
+                Аккаунт
+              </NavLink>
+            </div>
           </div>
-          <div className='navigation__account-block'>
-            <Link className='navigation__profile-link' to='/profile'>
-              Аккаунт
-            </Link>
-          </div>
-
-        </div>
+        </>
       ) : (
         <div className='navigation__not-loggedin'>
           <Link className='navigation__register' to='/signup'>

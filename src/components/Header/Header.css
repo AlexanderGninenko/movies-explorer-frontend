@@ -9,3 +9,10 @@
 .header_light-theme {
     background-color: transparent;
 }
+
+@media screen and (max-width: 768px) {
+    .header {
+        padding: 18px 30px;
+
+    }
+}

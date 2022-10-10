@@ -1,4 +1,3 @@
-import Header from '../Header/Header';
 import { useEffect, useState, useContext } from 'react';
 import { CurrentUserContext } from './../../contexts/CurrentUserContext';
 
@@ -35,9 +34,6 @@ function Profile({ onSignOut, onUpdateUser }) {
   }
 
   return (
-    <>
-      <Header />
-
       <form onSubmit={editProfile} className='profile__form form'>
         <h1 className='proifle__title'>Привет, {currentUser.name}!</h1>
         <div className='profile__block'>
@@ -75,7 +71,6 @@ function Profile({ onSignOut, onUpdateUser }) {
           Выйти из аккаунта
         </button>
       </form>
-    </>
   );
 }
 
