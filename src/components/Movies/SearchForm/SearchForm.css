@@ -86,3 +86,27 @@
 .searchform__shorts-input:checked:before {
     left: 18px;
 }
+
+@media screen and (max-width: 768px) {
+    .searchform {
+        padding: 0 30px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .searchform {
+        padding: 0 14px;
+    }
+
+    .searchform__field {
+        margin-bottom: 44px;
+    }
+
+    .searchform__button {
+        width: 70px;
+    }
+
+    .searchform__shorts {
+        padding-bottom: 44px;
+    }
+}

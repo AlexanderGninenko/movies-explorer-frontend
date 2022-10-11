@@ -68,7 +68,7 @@
         align-items: center;
         position: static;
     }
-    
+
     .promo__logo {
         position: static;
         margin: 140px auto 48px auto;
@@ -85,5 +85,36 @@
     .promo__description {
         text-align: center;
         margin: 0 0 92px 0;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .promo {
+        padding: 0 10px;
+        min-height: 636px;
+        margin: 0 0 70px 0;
+    }
+
+    .promo__logo {
+        margin: 70px auto 44px auto;
+        width: 210px;
+        height: 206px;
+    }
+
+    .promo__title {
+        font-size: 30px;
+        line-height: 38px;
+        padding: 0 0 24px 0;
+        letter-spacing: -0.04em;
+    }
+
+    .promo__description {
+        margin: 0 0 80px 0;
+        max-width: 260px;
+    }
+
+    .promo__learn-more {
+        width: 129px;
+        height: 36px;
     }
 }

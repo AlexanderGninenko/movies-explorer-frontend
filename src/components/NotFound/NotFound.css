@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    min-height: 100vh;
+    height: 100vh;
 }
 
 .notFound__title {
@@ -18,7 +18,7 @@
 }
 
 .notFound__subtitle {
-    margin: 0 0 184px 0;
+    margin: 0;
     padding: 0;
     font-family: 'Inter', 'Arial', sans-serif;
     font-style: normal;
@@ -30,7 +30,8 @@
 }
 
 .notFound__button {
-    margin: 0;
+    position: relative;
+    margin: 184px 0 0 0;
     padding: 0;
     font-family: 'Inter', 'Arial', sans-serif;
     font-style: normal;
@@ -41,4 +42,17 @@
     border: none;
     background: none;
     cursor: pointer;
+}
+
+@media screen and (max-width: 320px) {
+    .notFound__title {
+        font-size: 80px;
+        line-height: 97px;
+        margin-bottom: 10px;
+    }
+
+    .notFound__subtitle {
+        font-size: 12px;
+        line-height: 15px;
+    }
 }

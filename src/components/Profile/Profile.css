@@ -62,7 +62,39 @@
     cursor: pointer;
 }
 
+.profile__button:hover {
+    opacity: .7;
+}
+
 .profile__button:last-of-type {
     color: #FF3055;
 }
 
+@media screen and (max-width: 768px) {
+    .proifle__title {
+        margin: 236px 0 96px 0;
+    }
+
+    .profile__block {
+        margin-bottom: 210px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .profile__form {
+        width: 260px;
+    }
+
+    .proifle__title {
+        margin: 70px 0 80px 0;
+    }
+
+    .profile__button {
+        font-size: 12px;
+        line-height: 15px;
+    }
+
+    .profile__block {
+        margin-bottom: 379px;
+    }
+}

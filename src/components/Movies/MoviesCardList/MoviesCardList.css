@@ -6,3 +6,17 @@
     justify-content: center;
 }
 
+@media screen and (max-width: 768px) {
+    .moviescardlist {
+        grid-template-columns: repeat(auto-fit, 339px);
+        gap: 30px 32px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .moviescardlist {
+        grid-template-columns: repeat(auto-fit, 300px);
+        padding-top: 50px;
+        gap: 20px;
+    }
+}

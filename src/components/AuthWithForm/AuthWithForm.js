@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, NavLink } from 'react-router-dom';
 import logo from '../../images/logo.svg';
 import { useForm } from "react-hook-form";
 
@@ -31,7 +31,7 @@ const AuthWithForm = ({
       className='auth__form'
       noValidate
     >
-      <img className='auth__logo' src={logo} alt='Логотип' />
+      <NavLink className='auth__logo' to='/'><img  src={logo} alt='Логотип' /></NavLink>
       <h1 className='auth__title'>{title}</h1>
       {location.pathname === '/signup' && (
         <>

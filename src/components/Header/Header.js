@@ -1,21 +1,29 @@
 import { React, useContext } from 'react';
-import logo from "../../images/logo.svg";
-import { useLocation } from "react-router-dom";
-import Navigation from "../Navigation/Navigation";
+import logo from '../../images/logo.svg';
+import { NavLink, useLocation } from 'react-router-dom';
+import Navigation from '../Navigation/Navigation';
 import { LoggedInContext } from './../../contexts/LoggedInContext';
 
-
-function Header({onOpenMenu, isMenuOpen, onClose}) {
+function Header({ onOpenMenu, isMenuOpen, onCloseMenu, onClosePopup }) {
   const loggedIn = useContext(LoggedInContext);
   const location = useLocation();
   return (
     <header
-      className={`header ${loggedIn ? "header_light-theme" : ""} ${
-        location.pathname === "/signup" ? "header_hidden" : ""
-      } ${location.pathname === "/signin" ? "header_hidden" : ""}`}
+      className={`header ${loggedIn && 'header_light-theme'} ${
+        location.pathname === '/signup' && 'hidden'
+      } ${location.pathname === '/signin' && 'hidden'}
+      ${location.pathname === '/404' && 'hidden'}`}
     >
-      <img className="header__logo" src={logo} alt="Логотип"></img>
-      <Navigation loggedIn={loggedIn} isBurgerMenuOpen={isMenuOpen} onOpenMenu={onOpenMenu} onClose={onClose}/>
+      <NavLink className='header__logo' to='/'>
+        <img src={logo} alt='Логотип'></img>
+      </NavLink>
+      <Navigation
+        loggedIn={loggedIn}
+        isBurgerMenuOpen={isMenuOpen}
+        onOpenMenu={onOpenMenu}
+        onClose={onClosePopup}
+        onCloseMenu={onCloseMenu}
+      />
     </header>
   );
 }

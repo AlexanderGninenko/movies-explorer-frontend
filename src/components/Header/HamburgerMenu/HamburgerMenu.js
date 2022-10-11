@@ -1,16 +1,25 @@
+import { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
-const HamburgerMenu = ({ isOpen, onClose, onOpenMenu }) => {
+const HamburgerMenu = ({ isOpen, onClosePopup, onCloseMenu, onOpenMenu }) => {
+  const location = useLocation();
+  useEffect(() => onCloseMenu, [location.pathname]);
+
   return (
     <>
       <button onClick={onOpenMenu} className='hamburger'></button>
       <nav className={`hamburger__menu ${isOpen && 'hamburger__menu_opened'}`}>
         <button
-          onClick={onClose}
+          onClick={onCloseMenu}
           type='button'
           className='hamburger__close-icon'
         ></button>
-        <div className='hamburger__menu-wrapper'>
+        <div
+          className={`hamburger__menu-wrapper ${
+            isOpen && 'hamburger__menu-wrapper_opened'
+          }`}
+        >
           <div className='hamburger__menu-list'>
             <NavLink
               activeClassName='hamburger__active-link'
@@ -35,7 +44,6 @@ const HamburgerMenu = ({ isOpen, onClose, onOpenMenu }) => {
               Сохраненные фильмы
             </NavLink>
             <NavLink
-              
               to='/profile'
               className='navigation__account-block hamburger__menu-list-item'
             >

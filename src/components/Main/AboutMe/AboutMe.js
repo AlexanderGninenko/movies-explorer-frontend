@@ -1,10 +1,12 @@
-import myphoto from "../../../images/myphoto.svg";
+import myphoto from "../../../images/myphoto.jpg";
 
 function AboutMe() {
   return (
     <div className="about-me">
       <h1 className="about-me__title">Студент</h1>
       <div className="about-me__container">
+      <img className="about-me__photo" src={myphoto} alt="Мое фото" />
+
         <div className="about-me__info">
           <h2 className="about-me__name">Александр</h2>
           <h3 className="about-me__status">Фронтенд-разработчик, 32 года</h3>
@@ -23,7 +25,6 @@ function AboutMe() {
             Github
           </a>
         </div>
-        <img className="about-me__photo" src={myphoto} alt="Мое фото" />
       </div>
     </div>
   );

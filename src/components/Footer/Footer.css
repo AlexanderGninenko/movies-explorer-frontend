@@ -61,3 +61,42 @@
         padding: 0 30px 20px 30px;
     }
 }
+
+@media screen and (max-width: 320px) {
+    .footer {
+        padding: 0 10px 20px 10px;
+    }
+
+    .footer__title {
+        font-size: 12px;
+        line-height: 15px;
+        margin-bottom: 30px;
+    }
+
+    .footer__container {
+        display: flex;
+        flex-direction: column;
+        flex-flow: column-reverse;
+        text-align: center;
+    }
+
+    .footer__links {
+        display: block;
+    }
+
+    .footer__links-item {
+        font-size: 12px;
+        line-height: 15px;
+    }
+
+    .footer__links-item:first-child {
+        margin: 0;
+        padding-bottom: 12px;
+    }
+
+    .footer__year {
+        padding-top: 30px;
+        font-size: 12px;
+        line-height: 15px;
+    }
+}

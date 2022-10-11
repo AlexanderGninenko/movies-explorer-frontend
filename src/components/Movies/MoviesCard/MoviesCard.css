@@ -13,9 +13,14 @@
     display: flex;
 }
 
+.moviecard__description {
+    padding: 0 12px 14px 12px;
+}
+
 .moviecard__title-block {
     display: flex;
-    padding: 0 12px 10px 12px;
+    padding: 0 0 10px 0;
+    justify-content: space-between;
 }
 
 .moviecard__title {
@@ -27,7 +32,7 @@
     color: #000000;
     padding: 0;
     width: 206px;
-    margin: 0 24px 0 0;
+    margin: 0;
 }
 
 .moviecard__save-input {
@@ -46,7 +51,7 @@
     height: 12px;
     background: #f9f9f9;
     border-radius: 50%;
-    top:2px;
+    top: 2px;
     left: 2px;
 }
 
@@ -56,7 +61,7 @@
 
 .moviecard__duration {
     margin: 0;
-    padding: 0 0 0 12px;
+    padding: 0;
     font-family: 'Inter', 'Arial', sans-serif;
     font-style: normal;
     font-weight: 400;
@@ -64,4 +69,26 @@
     line-height: 13px;
     display: flex;
     color: #A0A0A0;
+}
+
+@media screen and (max-width: 768px) {
+    .moviecard {
+        width: 339px;
+        height: 257px;
+    }
+
+    .moviecard__image {
+        max-height: 190px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .moviecard {
+        width: 300px;
+        height: 235px;
+    }
+
+    .moviecard__image {
+        max-height: 168px;
+    }
 }

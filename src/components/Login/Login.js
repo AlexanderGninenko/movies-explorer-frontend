@@ -1,6 +1,6 @@
 import AuthWithForm from "../AuthWithForm/AuthWithForm";
 
-const Login = ({ onLogin, isLoading, loggedIn }) => {
+const Login = ({ onLogin, isLoading }) => {
 
   return (
     <AuthWithForm

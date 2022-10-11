@@ -6,6 +6,10 @@
     padding: 18px 70px;
 }
 
+.hidden {
+    display: none;
+}
+
 .header_light-theme {
     background-color: transparent;
 }
@@ -13,6 +17,11 @@
 @media screen and (max-width: 768px) {
     .header {
         padding: 18px 30px;
+    }
+}
 
+@media screen and (max-width: 320px) {
+    .header {
+        padding: 18px 14px;
     }
 }

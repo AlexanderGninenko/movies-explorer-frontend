@@ -16,16 +16,18 @@
     position: fixed;
     width: 100%;
     min-height: 100%;
-    position: fixed;
     top: 0;
     left: 0;
     background-color: rgba(0, 0, 0, .3);
+
 }
 
 .hamburger__menu_opened {
     display: flex;
     visibility: visible;
     opacity: 1;
+    position: fixed;
+    z-index: 1;
 }
 
 .hamburger__menu-list {
@@ -42,8 +44,13 @@
     padding: 0;
     margin: 0;
     position: fixed;
-    right: 0;
+    right: -520px;
+    transition: .5s;
+}
 
+.hamburger__menu-wrapper_opened {
+    right: 0;
+    transition: .5s;
 }
 
 .hamburger__close-icon {
@@ -101,5 +108,25 @@
         right: 30px;
         visibility: visible;
         opacity: 1;
+    }
+}
+
+@media screen and (max-width: 320px) {
+
+    .hamburger__menu-list-item {
+        margin: 15px 0 0 0;
+        padding: 0 0 7px 0;
+    }
+
+    .hamburger__menu-list-item:first-of-type {
+        margin: 144px 0 0 0;
+    }
+
+    .hamburger {
+        right: 10px;
+    }
+
+    .hamburger__menu-wrapper {
+        width: 100%;
     }
 }

@@ -1,5 +1,11 @@
 import React from 'react';
-import { Route, Switch, useHistory, withRouter } from 'react-router-dom';
+import {
+  Redirect,
+  Route,
+  Switch,
+  useHistory,
+  withRouter,
+} from 'react-router-dom';
 import Main from './../Main/Main';
 import Movies from '../Movies/Movies';
 import Register from '../Register/Register';
@@ -14,6 +20,7 @@ import NotFound from '../NotFound/NotFound';
 import ProtectedRoute from './../ProtectedRoute/ProtectedRoute';
 import SavedMovies from './../SavedMovies/SavedMovies';
 import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
 
 function App() {
   React.useState(false);
@@ -27,6 +34,7 @@ function App() {
   const [selectedCard, setSelectedCard] = React.useState(null);
   const [cards, setCards] = React.useState([]);
   const [loggedIn, setLoggedIn] = React.useState(false);
+  const [visible, setVisible] = React.useState(true);
 
   const [email, setEmail] = React.useState('');
 
@@ -119,6 +127,9 @@ function App() {
 
   const closeAllPopups = () => {
     setIsInfoTooltipOpen(false);
+  };
+
+  const closeHamburgerMenu = () => {
     setIsBurgerMenuOpen(false);
   };
 
@@ -167,16 +178,19 @@ function App() {
 
   const handleShowBurgerMenu = () => {
     setIsBurgerMenuOpen(true);
-  }
+  };
 
   return (
     <LoggedInContext.Provider value={localToken}>
       <CurrentUserContext.Provider value={currentUser}>
         {isRenderLoading && <Preloader />}
         <div className='app'>
-          <Header onOpenMenu={handleShowBurgerMenu}
-                  isMenuOpen={isBurgerMenuOpen}
-                  onClose={closeAllPopups}/>
+          <Header
+            onOpenMenu={handleShowBurgerMenu}
+            onCloseMenu={closeHamburgerMenu}
+            isMenuOpen={isBurgerMenuOpen}
+            onClosePopup={closeAllPopups}
+          />
           <Switch>
             <Route exact path='/'>
               <Main />
@@ -211,15 +225,17 @@ function App() {
                 isLoading={isRenderLoading}
               />
             </Route>
-            <Route path='*'>
+            <Route path='/404'>
               <NotFound onGoBack={handleGoBack} />
             </Route>
+            <Redirect to='/404' />
           </Switch>
           <InfoTooltip
             isOpen={isInfoTooltipOpen}
             data={infoTooltipData}
             onClose={closeAllPopups}
           />
+          <Footer />
         </div>
       </CurrentUserContext.Provider>
     </LoggedInContext.Provider>

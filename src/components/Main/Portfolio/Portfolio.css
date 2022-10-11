@@ -58,7 +58,7 @@
     .portfolio {
         padding: 0 50px;
     }
-    
+
     .portfolio__title {
         padding-top: 91px;
     }
@@ -69,5 +69,26 @@
 
     .portfolio__list-item {
         font-size: 28px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .portfolio {
+        padding: 0 14px;
+    }
+
+    .portfolio__title {
+        font-size: 14px;
+        line-height: 20px;
+        padding: 70px 0 40px 0;
+    }
+
+    .portfolio__list {
+        padding-bottom: 70px;
+    }
+
+    .portfolio__list-item {
+        font-size: 18px;
+        line-height: 28px;
     }
 }

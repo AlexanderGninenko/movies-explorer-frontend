@@ -1,12 +1,23 @@
 import { Link, NavLink } from 'react-router-dom';
 import HamburgerMenu from '../Header/HamburgerMenu/HamburgerMenu';
 
-function Navigation({ loggedIn, isBurgerMenuOpen, onOpenMenu, onClose }) {
+function Navigation({
+  loggedIn,
+  isBurgerMenuOpen,
+  onOpenMenu,
+  onClosePopup,
+  onCloseMenu,
+}) {
   return (
     <nav className='navigation'>
       {loggedIn ? (
         <>
-          <HamburgerMenu isOpen={isBurgerMenuOpen} onOpenMenu={onOpenMenu} onClose={onClose}/>
+          <HamburgerMenu
+            isOpen={isBurgerMenuOpen}
+            onOpenMenu={onOpenMenu}
+            onCloseMenu={onCloseMenu}
+            onClosePopup={onClosePopup}
+          />
           <div className='navigation__loggedin'>
             <div className='navigation__movies-block'>
               <NavLink

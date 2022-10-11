@@ -105,3 +105,17 @@
         display: none;
     }
 }
+
+@media screen and (max-width: 320px) {
+    .navigation__login {
+        font-size: 10px;
+        width: 54px;
+        height: 26px;
+    }
+
+    .navigation__register {
+        font-size: 10px;
+        margin-right: 14px;
+
+    }
+}
