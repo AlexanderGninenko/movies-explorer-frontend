@@ -21,6 +21,7 @@ import ProtectedRoute from './../ProtectedRoute/ProtectedRoute';
 import SavedMovies from './../SavedMovies/SavedMovies';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
+import { getMovies } from './../../utils/MoviesAPI';
 
 function App() {
   React.useState(false);
@@ -169,7 +170,6 @@ function App() {
       })
       .catch((err) => {
         setError(err.message);
-        console.log(error);
       })
       .finally(() => setIsRenderLoading(false));
   };
@@ -183,6 +183,8 @@ function App() {
   const handleShowBurgerMenu = () => {
     setIsBurgerMenuOpen(true);
   };
+
+  // getMovies();
 
   return (
     <LoggedInContext.Provider value={localToken}>

@@ -3,11 +3,11 @@ import SearchForm from '../Movies/SearchForm/SearchForm';
 
 const SavedMovies = () => {
   return (
-    <div className='movies'>
+    <section className='movies'>
       <SearchForm />
       <SavedMoviesCardList />
       <button className='movies__more'>Ещё</button>
-    </div>
+    </section>
   );
 };
 

@@ -21,6 +21,8 @@ function Footer() {
             <a
               href='https://github.com/AlexanderGninenko/movies-explorer-api'
               className='footer__link'
+              target='_blank'
+              rel='noreferrer'
             >
               Яндекс.Практикум
             </a>
@@ -29,6 +31,8 @@ function Footer() {
             <a
               href='https://github.com/AlexanderGninenko/movies-explorer-api'
               className='footer__link'
+              target='_blank'
+              rel='noreferrer'
             >
               Github
             </a>
