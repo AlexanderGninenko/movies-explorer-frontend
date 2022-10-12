@@ -42,6 +42,10 @@
     border-radius: 3px;
 }
 
+.searchform__button:hover {
+    opacity: .8;
+}
+
 .searchform__shorts {
     display: flex;
     justify-content: center;
@@ -73,7 +77,7 @@
 
 .searchform__shorts-input:before {
     content: '';
-    background: #2BE080;
+    background: #F5F5F5;
     position: absolute;
     width: 16px;
     height: 16px;
@@ -85,6 +89,7 @@
 
 .searchform__shorts-input:checked:before {
     left: 18px;
+    background: #2BE080;
 }
 
 @media screen and (max-width: 768px) {

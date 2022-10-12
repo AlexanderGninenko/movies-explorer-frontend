@@ -63,6 +63,7 @@
     padding: 0;
 }
 
+
 .navigation__saved-movies {
     margin: 0;
     padding: 0;
@@ -73,6 +74,10 @@
     line-height: 18px;
     color: #000000;
     text-decoration: none;
+}
+
+.navigation__movies_light-theme {
+    color: #fff;
 }
 
 .navigation__account-block {

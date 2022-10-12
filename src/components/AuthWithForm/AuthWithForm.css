@@ -53,6 +53,10 @@
     color: #3456F3;
 }
 
+.auth__sign-in:hover {
+    opacity: .7;
+}
+
 .auth__input {
     padding: 15px;
     height: 46px;
@@ -84,6 +88,10 @@
     text-align: center;
     color: #fff;
     cursor: pointer;
+}
+
+.auth__button:hover {
+    opacity: .8;
 }
 
 .auth__button-signin {
@@ -147,7 +155,6 @@
     .auth__button-signin {
         margin: 247px 0 14px 0;
     }
-
 
     .auth__sign {
         font-size: 12px;

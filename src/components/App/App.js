@@ -34,7 +34,7 @@ function App() {
   const [selectedCard, setSelectedCard] = React.useState(null);
   const [cards, setCards] = React.useState([]);
   const [loggedIn, setLoggedIn] = React.useState(false);
-  const [visible, setVisible] = React.useState(true);
+  const [error, setError] = React.useState('');
 
   const [email, setEmail] = React.useState('');
 
@@ -167,7 +167,11 @@ function App() {
         setCurrentUser({ email: res.data.email, name: res.data.name });
         setIsRenderLoading(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setError(err.message);
+        console.log(error);
+      })
+      .finally(() => setIsRenderLoading(false));
   };
 
   const handleGoBack = () => {
@@ -206,6 +210,7 @@ function App() {
               component={Profile}
               onSignOut={signOut}
               onUpdateUser={handleUpdateUserInfo}
+              error={error}
             ></ProtectedRoute>
             <ProtectedRoute
               loggedIn={localToken}

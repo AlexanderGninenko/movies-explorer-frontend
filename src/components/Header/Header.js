@@ -9,8 +9,8 @@ function Header({ onOpenMenu, isMenuOpen, onCloseMenu, onClosePopup }) {
   const location = useLocation();
   return (
     <header
-      className={`header ${loggedIn && 'header_light-theme'} ${
-        location.pathname === '/signup' && 'hidden'
+      className={`header ${location.pathname !== '/' && 'header_light-theme'}
+        ${location.pathname === '/signup' && 'hidden'}
       } ${location.pathname === '/signin' && 'hidden'}
       ${location.pathname === '/404' && 'hidden'}`}
     >

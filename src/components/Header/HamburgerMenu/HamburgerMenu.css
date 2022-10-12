@@ -1,7 +1,5 @@
 .hamburger {
     display: none;
-    visibility: hidden;
-    opacity: 0;
     background-image: url(../../../images/burger-menu.svg);
     width: 44px;
     height: 44px;
@@ -11,7 +9,7 @@
     cursor: pointer;
 }
 
-.hamburger__menu {
+.hamburger__overlay {
     display: none;
     position: fixed;
     width: 100%;
@@ -22,10 +20,8 @@
 
 }
 
-.hamburger__menu_opened {
+.hamburger__overlay_opened {
     display: flex;
-    visibility: visible;
-    opacity: 1;
     position: fixed;
     z-index: 1;
 }
@@ -46,6 +42,9 @@
     position: fixed;
     right: -520px;
     transition: .5s;
+    z-index: 2;
+    max-width: 100%;
+    top: -1px;
 }
 
 .hamburger__menu-wrapper_opened {
@@ -81,6 +80,10 @@
     padding: 0 0 4px 0;
     margin: 0 0 22px 0;
     text-decoration: none;
+}
+
+.hamburger__menu-list-item:hover {
+    opacity: .7;
 }
 
 .hamburger__menu-list-item:first-of-type {

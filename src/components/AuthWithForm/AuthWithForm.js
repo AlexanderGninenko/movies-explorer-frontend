@@ -1,6 +1,6 @@
 import { Link, useLocation, NavLink } from 'react-router-dom';
 import logo from '../../images/logo.svg';
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form';
 
 const AuthWithForm = ({
   title,
@@ -10,7 +10,11 @@ const AuthWithForm = ({
   linkText,
   buttonText,
 }) => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const location = useLocation();
 
   const handleRegisterSubmit = (data) => {
@@ -27,11 +31,13 @@ const AuthWithForm = ({
         location.pathname === '/signup'
           ? handleRegisterSubmit
           : handleLoginSubmit
-  )}
+      )}
       className='auth__form'
       noValidate
     >
-      <NavLink className='auth__logo' to='/'><img  src={logo} alt='Логотип' /></NavLink>
+      <NavLink className='auth__logo' to='/'>
+        <img src={logo} alt='Логотип' />
+      </NavLink>
       <h1 className='auth__title'>{title}</h1>
       {location.pathname === '/signup' && (
         <>
@@ -43,7 +49,11 @@ const AuthWithForm = ({
             name='name'
             className={`auth__input ${errors.name && 'auth__input-error'} `}
             type='name'
-            {...register("name", {required: true, minLength : 2, pattern: /^[A-Za-zА-Яа-я]+$/})}
+            {...register('name', {
+              required: true,
+              minLength: 2,
+              pattern: /^[A-Za-zА-Яа-я]+$/,
+            })}
           />
         </>
       )}
@@ -55,7 +65,10 @@ const AuthWithForm = ({
         name='email'
         className={`auth__input ${errors.email && 'auth__input-error'} `}
         type='email'
-        {...register("email", { required: true, pattern: /^\w+(\[\+\.-\]?\w)*@\w+(\[\.-\]?\w+)*\.[a-z]+$/i})}
+        {...register('email', {
+          required: true,
+          pattern: /^\w+(\[\+\.-\]?\w)*@\w+(\[\.-\]?\w+)*\.[a-z]+$/i,
+        })}
       />
       <label className='auth__label' htmlFor='password'>
         Пароль
@@ -65,11 +78,20 @@ const AuthWithForm = ({
         name='password'
         className={`auth__input ${errors.password && 'auth__input-error'} `}
         type='password'
-        {...register("password", { required: true, minLength:4})}
+        {...register('password', { required: true, minLength: 4 })}
       />
-          <p className={`form__input-error ${(errors.name || errors.email || errors.password) && 'form__input-error_active'} `}>Что-то пошло не так...</p>
+      <p
+        className={`form__input-error ${
+          (errors.name || errors.email || errors.password) &&
+          'form__input-error_active'
+        } `}
+      >
+        Что-то пошло не так...
+      </p>
       <button
-        className={`auth__button ${location.pathname === '/signin' && 'auth__button-signin'}`}
+        className={`auth__button ${
+          location.pathname === '/signin' && 'auth__button-signin'
+        }`}
         type='submit'
         disabled={isLoading}
       >
@@ -77,7 +99,10 @@ const AuthWithForm = ({
       </button>
       <span className='auth__sign'>
         {text}
-        <Link className='auth__sign-in' to={location.pathname === '/signup' ? '/signin' : '/signup'}>
+        <Link
+          className='auth__sign-in'
+          to={location.pathname === '/signup' ? '/signin' : '/signup'}
+        >
           {linkText}
         </Link>
       </span>

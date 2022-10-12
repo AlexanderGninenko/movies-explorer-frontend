@@ -1,76 +1,100 @@
 import { useEffect, useState, useContext } from 'react';
 import { CurrentUserContext } from './../../contexts/CurrentUserContext';
+import { useForm } from 'react-hook-form';
 
-function Profile({ onSignOut, onUpdateUser }) {
-
+function Profile({ onSignOut, onUpdateUser, error }) {
   const currentUser = useContext(CurrentUserContext);
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm();
 
   const [values, setValues] = useState({});
 
-  useEffect(
-    () => setValues({ name: currentUser.name, email: currentUser.email }),
-    [currentUser]
-  );
+  useEffect(() => {
+    setValue('name', currentUser.name);
+    setValue('email', currentUser.email);
+  }, [currentUser]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setValues((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setValues((prev) => ({
+  //     ...prev,
+  //     [name]: value,
+  //   }));
+  // };
 
-  function editProfile(e) {
-    e.preventDefault();
-    if (
-      currentUser.name !== values.name ||
-      currentUser.email !== values.email
-    ) {
+  function editProfile(data) {
+    if (currentUser.name !== data.name || currentUser.email !== data.email) {
       onUpdateUser({
-        name: values.name,
-        email: values.email,
+        name: data.name,
+        email: data.email,
       });
+      setValue('name', data.name);
+      setValue('email', data.email);
     }
   }
 
   return (
-      <form onSubmit={editProfile} className='profile__form form'>
-        <h1 className='proifle__title'>Привет, {currentUser.name}!</h1>
-        <div className='profile__block'>
-          <label className='profile__label' htmlFor='name'>
-            Имя
-          </label>
-          <input
-            id='name'
-            name='name'
-            onChange={handleChange}
-            value={values.name || ''}
-            className='profile__input form__input'
-            type='name'
-            required
-          ></input>
-        </div>
-        <div className='profile__block'>
-          <label className='profile__label' htmlFor='email'>
-            Email
-          </label>
-          <input
-            id='email'
-            name='email'
-            onChange={handleChange}
-            value={values.email || ''}
-            className='profile__input form__input'
-            type='email'
-            required
-          ></input>
-        </div>
-        <button className='profile__button' type='submit'>
-          Редактировать
-        </button>
-        <button onClick={onSignOut} className='profile__button form__button' type='button'>
-          Выйти из аккаунта
-        </button>
-      </form>
+    <form
+      onSubmit={handleSubmit(editProfile)}
+      className='profile__form form'
+      noValidate
+    >
+      <h1 className='proifle__title'>Привет, {currentUser.name}!</h1>
+      <div className='profile__block'>
+        <label className='profile__label' htmlFor='name'>
+          Имя
+        </label>
+        <input
+          id='name'
+          name='name'
+          className={`profile__input ${errors.name && 'auth__input-error'}`}
+          type='name'
+          {...register('name', {
+            required: true,
+            minLength: 2,
+            pattern: /^[A-Za-zА-Яа-я]+$/,
+          })}
+        />
+      </div>
+      <div className='profile__block'>
+        <label className='profile__label' htmlFor='email'>
+          Email
+        </label>
+        <input
+          id='email'
+          name='email'
+          className={`profile__input ${
+            (errors.email || error) && 'auth__input-error'
+          }`}
+          type='email'
+          {...register('email', {
+            required: true,
+            pattern: /^\w+(\[\+\.-\]?\w)*@\w+(\[\.-\]?\w+)*\.[a-z]+$/i,
+          })}
+        />
+      </div>
+      <p
+        className={`form__input-error ${
+          (errors.name || errors.email || error) && 'form__input-error_active'
+        } `}
+      >
+        {error ? error : 'Что-то пошло не так...'}
+      </p>
+      <button className='profile__button' type='submit'>
+        Редактировать
+      </button>
+      <button
+        onClick={onSignOut}
+        className='profile__button form__button'
+        type='button'
+      >
+        Выйти из аккаунта
+      </button>
+    </form>
   );
 }
 
