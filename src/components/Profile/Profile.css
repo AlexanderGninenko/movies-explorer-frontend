@@ -70,6 +70,10 @@
     opacity: .7;
 }
 
+.profile__button:disabled {
+    opacity: .5;
+}
+
 .profile__button:last-of-type {
     color: #FF3055;
 }

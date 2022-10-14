@@ -19,7 +19,11 @@
     background: transparent;
     outline: 2px solid #E8E8E8;
     border-radius: 3px;
+    cursor: pointer;
+}
 
+.movies__more_hidden {
+    display: none;
 }
 
 @media screen and (max-width: 320px) {

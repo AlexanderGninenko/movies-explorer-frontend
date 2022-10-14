@@ -8,23 +8,17 @@ function Profile({ onSignOut, onUpdateUser, error }) {
     register,
     handleSubmit,
     setValue,
-    formState: { errors },
-  } = useForm();
-
-  const [values, setValues] = useState({});
+    reset,
+    getValues,
+    formState: { errors, isDirty, isValid },
+  } = useForm({
+    defaultValues: { name: currentUser.name, email: currentUser.email },
+    mode: 'onChange',
+  });
 
   useEffect(() => {
-    setValue('name', currentUser.name);
-    setValue('email', currentUser.email);
+    reset(currentUser);
   }, [currentUser]);
-
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setValues((prev) => ({
-  //     ...prev,
-  //     [name]: value,
-  //   }));
-  // };
 
   function editProfile(data) {
     if (currentUser.name !== data.name || currentUser.email !== data.email) {
@@ -85,7 +79,11 @@ function Profile({ onSignOut, onUpdateUser, error }) {
         >
           {error ? error : 'Что-то пошло не так...'}
         </p>
-        <button className='profile__button' type='submit'>
+        <button
+          className='profile__button'
+          type='submit'
+          disabled={!isDirty || !isValid}
+        >
           Редактировать
         </button>
         <button

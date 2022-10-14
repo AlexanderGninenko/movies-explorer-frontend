@@ -33,7 +33,6 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState({});
 
   const [selectedCard, setSelectedCard] = React.useState(null);
-  const [cards, setCards] = React.useState([]);
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [error, setError] = React.useState('');
 
@@ -110,7 +109,7 @@ function App() {
         if (res) {
           setCurrentUser({ email: res.email, name: res.name });
           setLoggedIn(true);
-          history.push('/profile');
+          history.push('/movies');
         }
       })
       .catch((e) => {
@@ -183,8 +182,6 @@ function App() {
   const handleShowBurgerMenu = () => {
     setIsBurgerMenuOpen(true);
   };
-
-  // getMovies();
 
   return (
     <LoggedInContext.Provider value={localToken}>

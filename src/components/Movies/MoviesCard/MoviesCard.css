@@ -7,10 +7,11 @@
 }
 
 .moviecard__image {
-    max-height: 151px;
+    height: 151px;
     width: 100%;
     margin: 0 0 14px 0;
     display: flex;
+    object-fit: contain;
 }
 
 .moviecard__description {
@@ -33,6 +34,14 @@
     padding: 0;
     width: 206px;
     margin: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.moviecard__title:hover {
+    overflow: visible;
 }
 
 .moviecard__save-input {
