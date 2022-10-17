@@ -1,14 +1,55 @@
-const SearchForm = () => {
+import { useState, useEffect } from 'react';
+
+const SearchForm = ({
+  findMovies,
+  toggleShorts,
+  isShortsToggled,
+  searchQuery,
+}) => {
+  const [value, setValue] = useState('');
+
+  useEffect(() => {
+    setValue(searchQuery);
+  }, [searchQuery]);
+
+  const handleFindMovies = (e) => {
+    e.preventDefault();
+    findMovies(value);
+  };
+
+  const handleInputChange = (e) => {
+    setValue(e.target.value);
+  };
+
+  const handleShortsToggle = () => {
+    toggleShorts();
+  };
+
   return (
     <form className='searchform'>
       <div className='searchform__field'>
-        <input className='searchform__input' placeholder='Фильм'></input>
-        <button type='submit' className='searchform__button'>
+        <input
+          onChange={handleInputChange}
+          className='searchform__input'
+          placeholder='Фильм'
+          value={value || ''}
+        ></input>
+        <button
+          onClick={handleFindMovies}
+          type='submit'
+          className='searchform__button'
+        >
           Найти
         </button>
       </div>
       <div className='searchform__shorts'>
-        <input type='checkbox' className='searchform__shorts-input'></input>
+        <input
+          onClick={handleShortsToggle}
+          checked={isShortsToggled || ''}
+          type='checkbox'
+          className='searchform__shorts-input'
+          readOnly
+        ></input>
         <span className='searchform__label'>Короткометражки</span>
       </div>
     </form>

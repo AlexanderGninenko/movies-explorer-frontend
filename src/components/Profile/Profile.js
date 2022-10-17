@@ -9,7 +9,6 @@ function Profile({ onSignOut, onUpdateUser, error }) {
     handleSubmit,
     setValue,
     reset,
-    getValues,
     formState: { errors, isDirty, isValid },
   } = useForm({
     defaultValues: { name: currentUser.name, email: currentUser.email },
