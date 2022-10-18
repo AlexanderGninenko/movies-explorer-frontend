@@ -19,7 +19,7 @@
 }
 
 .profile__block {
-    margin: 0 0 188px 0;
+    margin: 0 0 10px 0;
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -32,7 +32,7 @@
 }
 
 .profile__block:first-of-type {
-    margin: 0 0 17px 0;
+    margin: 0 0 10px 0;
     padding: 0 0 16px 0;
     border-bottom: 1px solid #E8E8E8;
 }
@@ -63,7 +63,7 @@
 }
 
 .profile__button:first-of-type {
-    margin: 20px 0 16px 0;
+    margin: 166px 0 16px 0;
 }
 
 .profile__button:hover {
@@ -77,6 +77,7 @@
 .profile__button:last-of-type {
     color: #FF3055;
 }
+
 
 @media screen and (max-width: 768px) {
     .proifle__title {

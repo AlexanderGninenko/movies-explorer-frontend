@@ -1,18 +1,17 @@
 import MoviesCard from '../MoviesCard/MoviesCard';
-import Preloader from './../../Preloader/Preloader';
 
 const MoviesCardList = ({
   movies,
-  isRenderLoading,
   moviesCount,
   localSavedMovies,
   isNothingFound,
   error,
-  saveMovie,
+  onSaveMovie,
+  savedMovies,
+  onDeleteMovie,
 }) => {
   return (
     <div className='moviescardlist'>
-      {isRenderLoading && <Preloader />}
       {isNothingFound && <p>Ничего не найдено</p>}
       {error && (
         <p className='moviescardlist__error'>
@@ -20,15 +19,27 @@ const MoviesCardList = ({
           или сервер недоступен. Подождите немного и попробуйте ещё раз
         </p>
       )}
-      {localSavedMovies ? (
+      {
+        <p
+          className={`moviescardlist__welcome-message ${
+            localSavedMovies && 'hidden'
+          }`}
+        >
+          Начните поиск
+        </p>
+      }
+      {localSavedMovies &&
         movies
           .slice(0, moviesCount)
           .map((movie) => (
-            <MoviesCard saveMovie={saveMovie} movie={movie} key={movie.id} />
-          ))
-      ) : (
-        <p>Начните поиск</p>
-      )}
+            <MoviesCard
+              onDeleteMovie={onDeleteMovie}
+              onSaveMovie={onSaveMovie}
+              movie={movie}
+              key={movie.id}
+              savedMovies={savedMovies}
+            />
+          ))}
     </div>
   );
 };

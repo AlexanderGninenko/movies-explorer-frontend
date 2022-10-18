@@ -69,7 +69,7 @@
     border-style: none;
     box-sizing: border-box;
     outline: none;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     background: #F9F9F9;
     border-radius: 8px;
 }
@@ -102,17 +102,22 @@
     opacity: 0;
     height: 12px;
     padding: 0;
-    margin: 0;
+    margin: 0 0 10px 0;
     font-family: 'Inter', 'Arial', sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 10px;
     line-height: 12px;
     color: #FF3055;
+    align-self: flex-start;
 }
 
 .form__input-error_active {
     opacity: 1;
+}
+
+.form__error {
+    opacity: 0;
 }
 
 .auth__input-error {

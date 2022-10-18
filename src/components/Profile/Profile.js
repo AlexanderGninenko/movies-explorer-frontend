@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useContext } from 'react';
 import { CurrentUserContext } from './../../contexts/CurrentUserContext';
 import { useForm } from 'react-hook-form';
 
@@ -48,12 +48,24 @@ function Profile({ onSignOut, onUpdateUser, error }) {
             className={`profile__input ${errors.name && 'auth__input-error'}`}
             type='name'
             {...register('name', {
-              required: true,
-              minLength: 2,
-              pattern: /^[A-Za-zА-Яа-я]+$/,
+              required: 'Введите имя',
+              minLength: { value: 2, message: 'Минимум 2 символа' },
+              pattern: {
+                value: /^[A-Za-zА-Яа-я]+$/,
+                message: 'Допустимы только буквы',
+              },
             })}
           />
         </div>
+
+        <p
+          className={`form__input-error ${
+            errors.name && 'form__input-error_active'
+          }`}
+        >
+          {errors?.name?.message}
+        </p>
+
         <div className='profile__block'>
           <label className='profile__label' htmlFor='email'>
             Email
@@ -61,22 +73,26 @@ function Profile({ onSignOut, onUpdateUser, error }) {
           <input
             id='email'
             name='email'
-            className={`profile__input ${
-              (errors.email || error) && 'auth__input-error'
-            }`}
+            className={`profile__input ${errors.email && 'auth__input-error'}`}
             type='email'
             {...register('email', {
-              required: true,
-              pattern: /^\w+(\[\+\.-\]?\w)*@\w+(\[\.-\]?\w+)*\.[a-z]+$/i,
+              required: 'Введите email',
+              pattern: {
+                value: /^\w+(\[\+\.-\]?\w)*@\w+(\[\.-\]?\w+)*\.[a-z]+$/i,
+                message: 'Введите корректный email',
+              },
             })}
           />
         </div>
         <p
           className={`form__input-error ${
-            (errors.name || errors.email || error) && 'form__input-error_active'
-          } `}
+            errors.email && 'form__input-error_active'
+          }`}
         >
-          {error ? error : 'Что-то пошло не так...'}
+          {errors?.email?.message}
+        </p>
+        <p className={`form__error ${error && 'form__error_active'} `}>
+          {error}
         </p>
         <button
           className='profile__button'

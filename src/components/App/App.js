@@ -21,7 +21,8 @@ import ProtectedRoute from './../ProtectedRoute/ProtectedRoute';
 import SavedMovies from './../SavedMovies/SavedMovies';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
-import { getMovies } from './../../utils/MoviesAPI';
+import * as mainapi from '../../utils/MainAPI';
+import * as moviesapi from '../../utils/MoviesAPI';
 
 function App() {
   React.useState(false);
@@ -31,12 +32,11 @@ function App() {
   const [isRenderLoading, setIsRenderLoading] = React.useState(false);
 
   const [currentUser, setCurrentUser] = React.useState({});
-
-  const [selectedCard, setSelectedCard] = React.useState(null);
+  const [movies, setMovies] = React.useState([]);
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [error, setError] = React.useState('');
 
-  const [email, setEmail] = React.useState('');
+  const [savedMovies, setSavedMovies] = React.useState([]);
 
   const [isBurgerMenuOpen, setIsBurgerMenuOpen] = React.useState(false);
 
@@ -45,22 +45,15 @@ function App() {
 
   React.useEffect(() => {
     tokenCheck();
+    mainapi
+      .getMovies()
+      .then((data) => setSavedMovies(data))
+      .catch((e) => console.log(e));
 
-    // if (loggedIn) {
-    //   api
-    //     .getInitialCards()
-    //     .then((cards) => {
-    //       setCards(cards.reverse());
-    //     })
-    //     .catch((err) => console.log(err));
-
-    //   api
-    //     .getUserInfo()
-    //     .then((user) => {
-    //       setCurrentUser(user);
-    //     })
-    //     .catch((err) => console.log(err));
-    // }
+    moviesapi
+      .getMovies()
+      .then((data) => setMovies(data))
+      .catch((e) => console.log(e));
   }, [loggedIn]);
 
   const tokenCheck = () => {
@@ -140,6 +133,9 @@ function App() {
       .then(() => {
         setLoggedIn(false);
         localStorage.removeItem('token');
+        localStorage.removeItem('movies');
+        localStorage.removeItem('searchQuery');
+        localStorage.removeItem('shortsToggled');
         setInfoTooltipData({
           image: 'success',
           message: 'Вы успешно вышли',
@@ -183,6 +179,49 @@ function App() {
     setIsBurgerMenuOpen(true);
   };
 
+  const handleDeleteMovie = (movie) => {
+    setIsRenderLoading(true);
+
+    mainapi
+      .deleteMovie(movie)
+      .then(() => {
+        setSavedMovies((movies) => movies.filter((item) => item !== movie));
+      })
+      .then(() => {
+        mainapi
+          .getMovies()
+          .then((data) => setSavedMovies(data))
+          .catch((e) => console.log(e));
+      })
+      .catch((e) => console.log(e))
+      .finally(() => setIsRenderLoading(false));
+  };
+
+  const handleSaveMovie = (movie) => {
+    mainapi
+      .saveMovie({
+        country: movie.country,
+        director: movie.director,
+        duration: movie.duration,
+        year: movie.year,
+        description: movie.description,
+        image: `https://api.nomoreparties.co/${movie.image.url}`,
+        trailerLink: movie.trailerLink,
+        thumbnail: `https://api.nomoreparties.co/${movie.image.formats.thumbnail.url}`,
+        nameRU: movie.nameRU,
+        nameEN: movie.nameEN,
+        movieId: movie.id,
+      })
+      .then(() => {
+        mainapi
+          .getMovies()
+          .then((data) => setSavedMovies(data))
+          .catch((e) => console.log(e));
+      })
+
+      .catch((e) => console.log(e));
+  };
+
   return (
     <LoggedInContext.Provider value={localToken}>
       <CurrentUserContext.Provider value={currentUser}>
@@ -201,6 +240,10 @@ function App() {
             <ProtectedRoute
               loggedIn={localToken}
               component={Movies}
+              movies={movies}
+              onDeleteMovie={handleDeleteMovie}
+              savedMovies={savedMovies}
+              onSaveMovie={handleSaveMovie}
               path='/movies'
             ></ProtectedRoute>
             <ProtectedRoute
@@ -214,6 +257,8 @@ function App() {
             <ProtectedRoute
               loggedIn={localToken}
               component={SavedMovies}
+              onDeleteMovie={handleDeleteMovie}
+              savedMovies={savedMovies}
               path='/saved-movies'
             ></ProtectedRoute>
 

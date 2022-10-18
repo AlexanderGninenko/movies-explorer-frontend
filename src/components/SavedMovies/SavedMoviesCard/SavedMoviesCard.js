@@ -1,11 +1,19 @@
-const MoviesCard = ({ movie, deleteMovie }) => {
+import { NavLink } from 'react-router-dom';
+
+const MoviesCard = ({ movie, onDeleteMovie }) => {
   const handleDeleteMovie = (e) => {
     e.preventDefault();
-    deleteMovie(movie);
+    onDeleteMovie(movie._id);
   };
   return (
     <div className='moviecard'>
-      <img src={movie.image} alt='Постер фильма' className='moviecard__image' />
+      <NavLink to={movie.trailerLink} target='_blank'>
+        <img
+          src={movie.image}
+          alt='Постер фильма'
+          className='moviecard__image'
+        />
+      </NavLink>
       <div className='moviecard__description'>
         <div className='moviecard__title-block'>
           <p className='moviecard__title'>{movie.nameRU}</p>

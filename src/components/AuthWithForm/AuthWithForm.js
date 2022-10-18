@@ -9,12 +9,13 @@ const AuthWithForm = ({
   text,
   linkText,
   buttonText,
+  error,
 }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm();
+    formState: { errors, isValid },
+  } = useForm({ mode: 'onChange' });
   const location = useLocation();
 
   const handleRegisterSubmit = (data) => {
@@ -50,11 +51,21 @@ const AuthWithForm = ({
             className={`auth__input ${errors.name && 'auth__input-error'} `}
             type='name'
             {...register('name', {
-              required: true,
-              minLength: 2,
-              pattern: /^[A-Za-zА-Яа-я]+$/,
+              required: 'Введите имя',
+              minLength: { value: 2, message: 'Минимум 2 символа' },
+              pattern: {
+                value: /^[A-Za-zА-Яа-я]+$/,
+                message: 'Допустимы только буквы',
+              },
             })}
           />
+          <p
+            className={`form__input-error ${
+              errors.name && 'form__input-error_active'
+            }`}
+          >
+            {errors?.name?.message}
+          </p>
         </>
       )}
       <label className='auth__label' htmlFor='email'>
@@ -66,10 +77,20 @@ const AuthWithForm = ({
         className={`auth__input ${errors.email && 'auth__input-error'} `}
         type='email'
         {...register('email', {
-          required: true,
-          pattern: /^\w+(\[\+\.-\]?\w)*@\w+(\[\.-\]?\w+)*\.[a-z]+$/i,
+          required: 'Введите email',
+          pattern: {
+            value: /^\w+(\[\+\.-\]?\w)*@\w+(\[\.-\]?\w+)*\.[a-z]+$/i,
+            message: 'Введите корректный email',
+          },
         })}
       />
+      <p
+        className={`form__input-error ${
+          errors.email && 'form__input-error_active'
+        }`}
+      >
+        {errors?.email?.message}
+      </p>
       <label className='auth__label' htmlFor='password'>
         Пароль
       </label>
@@ -78,14 +99,19 @@ const AuthWithForm = ({
         name='password'
         className={`auth__input ${errors.password && 'auth__input-error'} `}
         type='password'
-        {...register('password', { required: true, minLength: 4 })}
+        {...register('password', {
+          required: 'Введите пароль',
+          minLength: { value: 4, message: 'Минимум 4 символа' },
+        })}
       />
       <p
         className={`form__input-error ${
-          (errors.name || errors.email || errors.password) &&
-          'form__input-error_active'
-        } `}
+          errors.password && 'form__input-error_active'
+        }`}
       >
+        {errors?.password?.message}
+      </p>
+      <p className={`form__error ${error && 'form__error_active'} `}>
         Что-то пошло не так...
       </p>
       <button
@@ -93,7 +119,7 @@ const AuthWithForm = ({
           location.pathname === '/signin' && 'auth__button-signin'
         }`}
         type='submit'
-        disabled={isLoading}
+        disabled={!isValid}
       >
         {buttonText}
       </button>
