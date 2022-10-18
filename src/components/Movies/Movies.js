@@ -1,21 +1,19 @@
 import MoviesCardList from './MoviesCardList/MoviesCardList';
 import SearchForm from './SearchForm/SearchForm';
-import * as moviesapi from '../../utils/MoviesAPI';
-import * as mainapi from '../../utils/MainAPI';
 import { useState, useEffect } from 'react';
+import useWindowDimensions from './../../hooks/useWindowDimensions';
 
-function Movies() {
-  const [movies, setMovies] = useState([]);
+function Movies({ movies, savedMovies, onDeleteMovie, onSaveMovie }) {
   const [foundMovies, setFoundMovies] = useState([]);
   const [localSavedMovies, setLocalSavedMovies] = useState(false);
-  const [isRenderLoading, setIsRenderLoading] = useState(false);
-  const [moviesCount, setMoviesCount] = useState(5);
   const [isShortsToggled, setIsShortsToggled] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isNothingFound, setIsNothingFound] = useState(false);
   const [isSearched, setIsSearched] = useState(false);
   const [error, setError] = useState('');
   const [isDisabledButton, setIsDisabledButton] = useState(false);
+  const [moviesCount, setMoviesCount] = useState(0);
+  const [extraMoviesCount, setExtraMoviesCount] = useState(0);
 
   useEffect(() => {
     if (foundMovies.length) {
@@ -32,83 +30,53 @@ function Movies() {
         setSearchQuery(JSON.parse(localStorage.getItem('searchQuery')));
         setIsShortsToggled(JSON.parse(localStorage.getItem('shortsToggled')));
         setLocalSavedMovies(true);
-      } else setIsNothingFound(true);
+      } else setIsNothingFound(false);
     } else setLocalSavedMovies(false);
   }, [foundMovies, isShortsToggled, searchQuery, isSearched]);
 
-  const max_width = 1280;
-  const medium_width = 768;
-  const min_width = 480;
-
+  const { width } = useWindowDimensions();
   useEffect(() => {
-    function handleWindowResize() {
-      setWindowSize(getWindowSize());
-      console.log(windowSize);
+    console.log(width);
+
+    if (width > 1280) {
+      setMoviesCount(15);
+      setExtraMoviesCount(5);
+    } else if (width <= 1280 && width >= 769) {
+      setMoviesCount(12);
+      setExtraMoviesCount(3);
+    } else if (width <= 768 && width >= 481) {
+      setMoviesCount(8);
+      setExtraMoviesCount(2);
+    } else if (width <= 480 && width >= 320) {
+      setMoviesCount(5);
+      setExtraMoviesCount(2);
     }
-    window.addEventListener('resize', handleWindowResize);
-
-    return () => {
-      window.removeEventListener('resize', handleWindowResize);
-    };
-  }, []);
-
-  const getWindowSize = () => {
-    const { innerWidth, innerHeight } = window;
-    return { innerWidth, innerHeight };
-  };
-
-  const [windowSize, setWindowSize] = useState(getWindowSize());
+  }, [width]);
 
   const showMore = () => {
     if (foundMovies.length >= moviesCount) {
-      setMoviesCount(moviesCount + 5);
+      setMoviesCount(moviesCount + extraMoviesCount);
       console.log(moviesCount);
     } else setIsDisabledButton(true);
   };
 
   const findMovies = (value) => {
-    setIsRenderLoading(true);
+    setIsDisabledButton(false);
     setSearchQuery(value);
-    moviesapi
-      .getMovies()
-      .then((data) => {
-        setFoundMovies(
-          data.filter((movie) =>
-            isShortsToggled
-              ? (movie.nameRU.includes(value) && movie.duration <= 40) ||
-                (movie.nameEN.includes(value) && movie.duration <= 40)
-              : movie.nameRU.includes(value) || movie.nameEN.includes(value)
-          )
-        );
-      })
-      .catch((e) => setError(e))
-      .finally(() => {
-        setIsRenderLoading(false);
-      });
+    setFoundMovies(
+      movies.filter((movie) =>
+        isShortsToggled
+          ? (movie.nameRU.includes(value) && movie.duration <= 40) ||
+            (movie.nameEN.includes(value) && movie.duration <= 40)
+          : movie.nameRU.includes(value) || movie.nameEN.includes(value)
+      )
+    );
     setLocalSavedMovies(true);
     setIsSearched(true);
   };
 
   const toggleShorts = () => {
     setIsShortsToggled(!isShortsToggled);
-  };
-
-  const saveMovie = (movie) => {
-    mainapi
-      .saveMovie({
-        country: movie.country,
-        director: movie.director,
-        duration: movie.duration,
-        year: movie.year,
-        description: movie.description,
-        image: `https://api.nomoreparties.co/${movie.image.url}`,
-        trailerLink: movie.trailerLink,
-        thumbnail: `https://api.nomoreparties.co/${movie.image.formats.thumbnail.url}`,
-        nameRU: movie.nameRU,
-        nameEN: movie.nameEN,
-        movieId: movie.id,
-      })
-      .catch((e) => console.log(e));
   };
 
   return (
@@ -121,16 +89,19 @@ function Movies() {
       />
 
       <MoviesCardList
-        saveMovie={saveMovie}
+        savedMovies={savedMovies}
+        onDeleteMovie={onDeleteMovie}
+        onSaveMovie={onSaveMovie}
         isNothingFound={isNothingFound}
         localSavedMovies={localSavedMovies}
         movies={foundMovies}
-        isRenderLoading={isRenderLoading}
         moviesCount={moviesCount}
         error={error}
       />
       <button
-        className={`movies__more ${isDisabledButton && 'movies__more_hidden'}`}
+        className={`movies__more ${
+          (isDisabledButton || isNothingFound) && 'movies__more_hidden'
+        }`}
         onClick={showMore}
       >
         Ещё
