@@ -1,0 +1,36 @@
+import {
+  SERVER_CONFLICT_ERROR,
+  SERVER_FORBIDDEN_ERROR,
+  SERVER_UNAUTHORIZED_ERROR,
+  SERVER_BAD_REQUEST_ERROR,
+  SERVER_NOT_FOUND_ERROR,
+  SERVER_CONFLICT_ERROR_MESSAGE,
+  SERVER_FORBIDDEN_ERROR_MESSAGE,
+  SERVER_ERROR_MESSAGE,
+  SERVER_UNAUTHORIZED_ERROR_MESSAGE,
+  SERVER_BAD_REQUEST_ERROR_MESSAGE,
+  SERVER_NOT_FOUND_ERROR_MESSAGE,
+} from '../utils/constants';
+
+export const serverErrorHandler = (e) => {
+  switch (e) {
+    case SERVER_CONFLICT_ERROR:
+      console.log(e);
+      return SERVER_CONFLICT_ERROR_MESSAGE;
+    case SERVER_UNAUTHORIZED_ERROR:
+      console.log(e);
+      return SERVER_UNAUTHORIZED_ERROR_MESSAGE;
+    case SERVER_BAD_REQUEST_ERROR:
+      console.log(e);
+      return SERVER_BAD_REQUEST_ERROR_MESSAGE;
+    case SERVER_FORBIDDEN_ERROR:
+      console.log(e);
+      return SERVER_FORBIDDEN_ERROR_MESSAGE;
+    case SERVER_NOT_FOUND_ERROR:
+      console.log(e);
+      return SERVER_NOT_FOUND_ERROR_MESSAGE;
+    default:
+      console.log(e);
+      return SERVER_ERROR_MESSAGE;
+  }
+};

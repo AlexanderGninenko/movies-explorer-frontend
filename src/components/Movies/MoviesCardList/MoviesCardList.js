@@ -5,24 +5,29 @@ const MoviesCardList = ({
   moviesCount,
   localSavedMovies,
   isNothingFound,
-  error,
+  serverResponseError,
   onSaveMovie,
   savedMovies,
   onDeleteMovie,
 }) => {
   return (
     <div className='moviescardlist'>
-      {isNothingFound && <p>Ничего не найдено</p>}
-      {error && (
-        <p className='moviescardlist__error'>
-          Во время запроса произошла ошибка. Возможно, проблема с соединением
-          или сервер недоступен. Подождите немного и попробуйте ещё раз
+      {isNothingFound && (
+        <p
+          className={`moviescardlist__notfound ${
+            serverResponseError && 'hidden'
+          }`}
+        >
+          Ничего не найдено
         </p>
+      )}
+      {(serverResponseError || !localSavedMovies) && (
+        <p className='moviescardlist__error'>{serverResponseError}</p>
       )}
       {
         <p
           className={`moviescardlist__welcome-message ${
-            localSavedMovies && 'hidden'
+            (localSavedMovies || serverResponseError) && 'hidden'
           }`}
         >
           Начните поиск

@@ -4,18 +4,20 @@ import { useForm } from 'react-hook-form';
 
 const AuthWithForm = ({
   title,
-  isLoading,
   onAuth,
   text,
   linkText,
   buttonText,
-  error,
+  serverResponseError,
 }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
-  } = useForm({ mode: 'onChange' });
+    formState: { errors, isValid, isDirty },
+  } = useForm({
+    mode: 'onChange',
+    defaultValues: { name: '', email: '', password: '' },
+  });
   const location = useLocation();
 
   const handleRegisterSubmit = (data) => {
@@ -111,8 +113,12 @@ const AuthWithForm = ({
       >
         {errors?.password?.message}
       </p>
-      <p className={`form__error ${error && 'form__error_active'} `}>
-        Что-то пошло не так...
+      <p
+        className={`form__error ${
+          serverResponseError && 'form__error_active'
+        } `}
+      >
+        {serverResponseError}
       </p>
       <button
         className={`auth__button ${

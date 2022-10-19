@@ -1,13 +1,16 @@
-// const BASE_URL = 'https://moviessearcher.nomorepartiesxyz.ru/api/movies';
-const BASE_URL = 'http://localhost:4010/api/movies';
+const BASE_URL = 'https://moviessearcher.nomorepartiesxyz.ru/api/movies';
+// const BASE_URL = 'http://localhost:4010/api/movies';
 
 const checkResponse = (res) => {
   if (res.ok) {
     return res.json();
   }
-  return res.json().then((res) => {
-    throw new Error(res.message);
-  });
+  return Promise.reject(res.status);
+
+  // return res.json().then((res) => {
+  //   console.log(res.message);
+  //   throw new Error(res.message);
+  // });
 };
 
 export const getMovies = () => {

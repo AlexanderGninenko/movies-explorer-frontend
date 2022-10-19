@@ -12,9 +12,13 @@ const SearchForm = ({
     setValue(searchQuery);
   }, [searchQuery]);
 
+  useEffect(() => {
+    findMovies(value.toLowerCase());
+  }, [isShortsToggled]);
+
   const handleFindMovies = (e) => {
     e.preventDefault();
-    findMovies(value);
+    findMovies(value.toLowerCase());
   };
 
   const handleInputChange = (e) => {

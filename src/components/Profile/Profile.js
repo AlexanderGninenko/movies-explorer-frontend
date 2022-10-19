@@ -2,7 +2,7 @@ import { useEffect, useContext } from 'react';
 import { CurrentUserContext } from './../../contexts/CurrentUserContext';
 import { useForm } from 'react-hook-form';
 
-function Profile({ onSignOut, onUpdateUser, error }) {
+function Profile({ onSignOut, onUpdateUser, serverResponseError, resetError }) {
   const currentUser = useContext(CurrentUserContext);
   const {
     register,
@@ -18,6 +18,10 @@ function Profile({ onSignOut, onUpdateUser, error }) {
   useEffect(() => {
     reset(currentUser);
   }, [currentUser]);
+
+  useEffect(() => {
+    resetError();
+  }, []);
 
   function editProfile(data) {
     if (currentUser.name !== data.name || currentUser.email !== data.email) {
@@ -91,8 +95,12 @@ function Profile({ onSignOut, onUpdateUser, error }) {
         >
           {errors?.email?.message}
         </p>
-        <p className={`form__error ${error && 'form__error_active'} `}>
-          {error}
+        <p
+          className={`form__error ${
+            serverResponseError && 'form__error_active'
+          } `}
+        >
+          {serverResponseError}
         </p>
         <button
           className='profile__button'

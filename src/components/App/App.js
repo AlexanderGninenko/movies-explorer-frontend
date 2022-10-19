@@ -23,9 +23,9 @@ import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import * as mainapi from '../../utils/MainAPI';
 import * as moviesapi from '../../utils/MoviesAPI';
+import { serverErrorHandler } from '../../utils/errorHandler';
 
 function App() {
-  React.useState(false);
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
   const [infoTooltipData, setInfoTooltipData] = React.useState({});
 
@@ -34,7 +34,7 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [movies, setMovies] = React.useState([]);
   const [loggedIn, setLoggedIn] = React.useState(false);
-  const [error, setError] = React.useState('');
+  const [serverResponseError, setServerResponseError] = React.useState('');
 
   const [savedMovies, setSavedMovies] = React.useState([]);
 
@@ -43,17 +43,33 @@ function App() {
   const history = useHistory();
   const localToken = localStorage.getItem('token');
 
-  React.useEffect(() => {
-    tokenCheck();
-    mainapi
-      .getMovies()
-      .then((data) => setSavedMovies(data))
-      .catch((e) => console.log(e));
-
+  const getMoviesfromBeatFilm = () => {
     moviesapi
       .getMovies()
       .then((data) => setMovies(data))
-      .catch((e) => console.log(e));
+      .catch((e) => {
+        setServerResponseError(serverErrorHandler(e));
+      });
+  };
+
+  const getSavedMovies = () => {
+    mainapi
+      .getMovies()
+      .then((data) => setSavedMovies(data))
+      .catch((e) => {
+        setServerResponseError(serverErrorHandler(e));
+      });
+  };
+
+  React.useEffect(() => {
+    tokenCheck();
+  }, []);
+
+  React.useEffect(() => {
+    if (loggedIn) {
+      getSavedMovies();
+      getMoviesfromBeatFilm();
+    }
   }, [loggedIn]);
 
   const tokenCheck = () => {
@@ -65,7 +81,12 @@ function App() {
           setCurrentUser({ email: res.email, name: res.name });
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const resetError = () => {
+    setServerResponseError('');
   };
 
   const handleRegistration = (name, password, email) => {
@@ -77,17 +98,13 @@ function App() {
           image: 'success',
           message: 'Вы успешно зарегистрировались!',
         });
+        setIsInfoTooltipOpen(true);
         history.push('/signin');
       })
       .catch((e) => {
-        console.log(e);
-        setInfoTooltipData({
-          image: 'fail',
-          message: 'Что-то пошло не так! Попробуйте ещё раз.',
-        });
+        setServerResponseError(serverErrorHandler(e));
       })
       .finally(() => {
-        setIsInfoTooltipOpen(true);
         setIsRenderLoading(false);
       });
   };
@@ -106,12 +123,7 @@ function App() {
         }
       })
       .catch((e) => {
-        console.log(e);
-        setInfoTooltipData({
-          image: 'fail',
-          message: 'Что-то пошло не так! Попробуйте ещё раз.',
-        });
-        setIsInfoTooltipOpen(true);
+        setServerResponseError(serverErrorHandler(e));
       })
       .finally(() => {
         setIsRenderLoading(false);
@@ -143,7 +155,7 @@ function App() {
         history.push('/signin');
       })
       .catch((e) => {
-        console.log(e);
+        setServerResponseError(serverErrorHandler(e));
         setInfoTooltipData({
           image: 'fail',
           message: 'Что-то пошло не так! Попробуйте ещё раз.',
@@ -162,9 +174,14 @@ function App() {
       .then((res) => {
         setCurrentUser({ email: res.data.email, name: res.data.name });
         setIsRenderLoading(false);
+        setInfoTooltipData({
+          image: 'success',
+          message: 'Профиль успешно обновлен!',
+        });
+        setIsInfoTooltipOpen(true);
       })
-      .catch((err) => {
-        setError(err.message);
+      .catch((e) => {
+        setServerResponseError(serverErrorHandler(e));
       })
       .finally(() => setIsRenderLoading(false));
   };
@@ -180,6 +197,7 @@ function App() {
   };
 
   const handleDeleteMovie = (movie) => {
+    resetError();
     setIsRenderLoading(true);
 
     mainapi
@@ -191,13 +209,19 @@ function App() {
         mainapi
           .getMovies()
           .then((data) => setSavedMovies(data))
-          .catch((e) => console.log(e));
+          .catch((e) => {
+            setServerResponseError(serverErrorHandler(e));
+          });
       })
-      .catch((e) => console.log(e))
+      .catch((e) => {
+        setServerResponseError(serverErrorHandler(e));
+      })
       .finally(() => setIsRenderLoading(false));
   };
 
   const handleSaveMovie = (movie) => {
+    resetError();
+    setIsRenderLoading(true);
     mainapi
       .saveMovie({
         country: movie.country,
@@ -216,10 +240,14 @@ function App() {
         mainapi
           .getMovies()
           .then((data) => setSavedMovies(data))
-          .catch((e) => console.log(e));
+          .catch((e) => {
+            setServerResponseError(serverErrorHandler(e));
+          });
       })
-
-      .catch((e) => console.log(e));
+      .catch((e) => {
+        setServerResponseError(serverErrorHandler(e));
+      })
+      .finally(() => setIsRenderLoading(false));
   };
 
   return (
@@ -241,9 +269,12 @@ function App() {
               loggedIn={localToken}
               component={Movies}
               movies={movies}
+              getMovies={getMoviesfromBeatFilm}
               onDeleteMovie={handleDeleteMovie}
               savedMovies={savedMovies}
               onSaveMovie={handleSaveMovie}
+              serverResponseError={serverResponseError}
+              resetError={resetError}
               path='/movies'
             ></ProtectedRoute>
             <ProtectedRoute
@@ -252,13 +283,17 @@ function App() {
               component={Profile}
               onSignOut={signOut}
               onUpdateUser={handleUpdateUserInfo}
-              error={error}
+              serverResponseError={serverResponseError}
+              resetError={resetError}
             ></ProtectedRoute>
             <ProtectedRoute
               loggedIn={localToken}
               component={SavedMovies}
               onDeleteMovie={handleDeleteMovie}
               savedMovies={savedMovies}
+              getSavedMovies={getSavedMovies}
+              serverResponseError={serverResponseError}
+              resetError={resetError}
               path='/saved-movies'
             ></ProtectedRoute>
 
@@ -266,12 +301,16 @@ function App() {
               <Register
                 onRegister={handleRegistration}
                 isLoading={isRenderLoading}
+                serverResponseError={serverResponseError}
+                resetError={resetError}
               />
             </Route>
             <Route path='/signin'>
               <Login
                 onLogin={handleAuthorization}
                 isLoading={isRenderLoading}
+                serverResponseError={serverResponseError}
+                resetError={resetError}
               />
             </Route>
             <Route path='/404'>

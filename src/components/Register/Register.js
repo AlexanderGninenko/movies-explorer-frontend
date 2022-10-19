@@ -1,16 +1,25 @@
-import AuthWithForm from "../AuthWithForm/AuthWithForm";
+import AuthWithForm from '../AuthWithForm/AuthWithForm';
+import { useEffect } from 'react';
 
-const Register = ({ onRegister, isLoading }) => {
+const Register = ({
+  onRegister,
+  isLoading,
+  serverResponseError,
+  resetError,
+}) => {
+  useEffect(() => {
+    resetError();
+  }, []);
   return (
     <AuthWithForm
-      title="Добро пожаловать!"
+      title='Добро пожаловать!'
       onAuth={onRegister}
       isLoading={isLoading}
-      text="Уже зарегистрированы?"
-      linkText="Войти"
-      buttonText="Зарегистрироваться"
-    >
-    </AuthWithForm>
+      text='Уже зарегистрированы?'
+      linkText='Войти'
+      buttonText='Зарегистрироваться'
+      serverResponseError={serverResponseError}
+    ></AuthWithForm>
   );
 };
 

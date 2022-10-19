@@ -1,13 +1,15 @@
-// const BASE_URL = 'https://moviessearcher.nomorepartiesxyz.ru/api';
-const BASE_URL = 'http://localhost:4010/api';
+const BASE_URL = 'https://moviessearcher.nomorepartiesxyz.ru/api';
+// const BASE_URL = 'http://localhost:4010/api';
 
 const checkResponse = (res) => {
   if (res.ok) {
     return res.json();
   }
-  return res.json().then((res) => {
-    throw new Error(res.message);
-  });
+  return Promise.reject(res.status);
+
+  // return res.json().then((res) => {
+  //   throw new Error(res.message);
+  // });
 };
 
 export const register = (name, password, email) => {
@@ -57,8 +59,7 @@ export const getMyUser = () => {
     },
   })
     .then(checkResponse)
-    .then((data) => data)
-    .catch((err) => console.log(err));
+    .then((data) => data);
 };
 
 export const updateUserInfo = ({ name, email }) => {

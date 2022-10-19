@@ -2,15 +2,37 @@ import MoviesCardList from './MoviesCardList/MoviesCardList';
 import SearchForm from './SearchForm/SearchForm';
 import { useState, useEffect } from 'react';
 import useWindowDimensions from './../../hooks/useWindowDimensions';
+import {
+  DESKTOP_WIDTH,
+  LARGE_DESKTOP_EXTRA_ROW,
+  LARGE_DESKTOP_INITIAL_MOVIES,
+  TAB_INITIAL_MOVIES,
+  MOBILE_WIDTH,
+  MOBILE_EXTRA_ROW,
+  MINI_MOBILE_INITIAL_MOVIES,
+  MINI_MOBILE_EXTRA_ROW,
+  MINI_MOBILE_WIDTH,
+  MOBILE_INITIAL_MOVIES,
+  SHORT_MOVIE_DURATION,
+  TAB_EXTRA_ROW,
+  TAB_WIDTH,
+} from '../../utils/constants';
 
-function Movies({ movies, savedMovies, onDeleteMovie, onSaveMovie }) {
+function Movies({
+  movies,
+  savedMovies,
+  onDeleteMovie,
+  onSaveMovie,
+  serverResponseError,
+  resetError,
+  getMovies,
+}) {
   const [foundMovies, setFoundMovies] = useState([]);
   const [localSavedMovies, setLocalSavedMovies] = useState(false);
   const [isShortsToggled, setIsShortsToggled] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isNothingFound, setIsNothingFound] = useState(false);
   const [isSearched, setIsSearched] = useState(false);
-  const [error, setError] = useState('');
   const [isDisabledButton, setIsDisabledButton] = useState(false);
   const [moviesCount, setMoviesCount] = useState(0);
   const [extraMoviesCount, setExtraMoviesCount] = useState(0);
@@ -34,45 +56,62 @@ function Movies({ movies, savedMovies, onDeleteMovie, onSaveMovie }) {
     } else setLocalSavedMovies(false);
   }, [foundMovies, isShortsToggled, searchQuery, isSearched]);
 
+  useEffect(() => {
+    resetError();
+  }, []);
+
   const { width } = useWindowDimensions();
   useEffect(() => {
-    console.log(width);
-
-    if (width > 1280) {
-      setMoviesCount(15);
-      setExtraMoviesCount(5);
-    } else if (width <= 1280 && width >= 769) {
-      setMoviesCount(12);
-      setExtraMoviesCount(3);
-    } else if (width <= 768 && width >= 481) {
-      setMoviesCount(8);
-      setExtraMoviesCount(2);
-    } else if (width <= 480 && width >= 320) {
-      setMoviesCount(5);
-      setExtraMoviesCount(2);
+    if (width > DESKTOP_WIDTH) {
+      setMoviesCount(LARGE_DESKTOP_INITIAL_MOVIES);
+      setExtraMoviesCount(LARGE_DESKTOP_EXTRA_ROW);
+    } else if (width <= DESKTOP_WIDTH && width > TAB_WIDTH) {
+      setMoviesCount(TAB_INITIAL_MOVIES);
+      setExtraMoviesCount(TAB_EXTRA_ROW);
+    } else if (width <= TAB_WIDTH && width > MOBILE_WIDTH) {
+      setMoviesCount(MOBILE_INITIAL_MOVIES);
+      setExtraMoviesCount(MOBILE_EXTRA_ROW);
+    } else if (width <= MOBILE_WIDTH && width >= MINI_MOBILE_WIDTH) {
+      setMoviesCount(MINI_MOBILE_INITIAL_MOVIES);
+      setExtraMoviesCount(MINI_MOBILE_EXTRA_ROW);
     }
   }, [width]);
 
+  useEffect(() => {
+    console.log(moviesCount, foundMovies.length);
+    if (
+      foundMovies.length === moviesCount ||
+      foundMovies.length < moviesCount
+    ) {
+      setIsDisabledButton(true);
+    } else setIsDisabledButton(false);
+  }, [moviesCount, foundMovies.length]);
+
   const showMore = () => {
-    if (foundMovies.length >= moviesCount) {
-      setMoviesCount(moviesCount + extraMoviesCount);
-      console.log(moviesCount);
-    } else setIsDisabledButton(true);
+    setMoviesCount(moviesCount + extraMoviesCount);
   };
 
   const findMovies = (value) => {
-    setIsDisabledButton(false);
+    resetError();
     setSearchQuery(value);
-    setFoundMovies(
-      movies.filter((movie) =>
-        isShortsToggled
-          ? (movie.nameRU.includes(value) && movie.duration <= 40) ||
-            (movie.nameEN.includes(value) && movie.duration <= 40)
-          : movie.nameRU.includes(value) || movie.nameEN.includes(value)
-      )
-    );
-    setLocalSavedMovies(true);
-    setIsSearched(true);
+
+    if (movies.length) {
+      setFoundMovies(
+        movies.filter((movie) =>
+          isShortsToggled
+            ? (movie.nameRU.toLowerCase().includes(value) &&
+                movie.duration <= SHORT_MOVIE_DURATION) ||
+              (movie.nameEN.toLowerCase().includes(value) &&
+                movie.duration <= SHORT_MOVIE_DURATION)
+            : movie.nameRU.toLowerCase().includes(value) ||
+              movie.nameEN.toLowerCase().includes(value)
+        )
+      );
+      setLocalSavedMovies(true);
+      setIsSearched(true);
+    } else {
+      getMovies();
+    }
   };
 
   const toggleShorts = () => {
@@ -96,11 +135,13 @@ function Movies({ movies, savedMovies, onDeleteMovie, onSaveMovie }) {
         localSavedMovies={localSavedMovies}
         movies={foundMovies}
         moviesCount={moviesCount}
-        error={error}
+        serverResponseError={serverResponseError}
+        resetError={resetError}
       />
       <button
         className={`movies__more ${
-          (isDisabledButton || isNothingFound) && 'movies__more_hidden'
+          (isDisabledButton || isNothingFound || !localSavedMovies) &&
+          'movies__more_hidden'
         }`}
         onClick={showMore}
       >
