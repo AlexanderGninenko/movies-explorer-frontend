@@ -1,0 +1,117 @@
+.searchform {
+    padding: 0 70px;
+    margin: 0 auto;
+}
+
+.searchform__field {
+    display: flex;
+    margin: 0 0 30px 0;
+    align-items: center;
+}
+
+.searchform__input {
+    outline: none;
+    border-style: none;
+    width: 100%;
+    height: 48px;
+    background: #F9F9F9;
+    border-radius: 4px;
+    padding: 15px 0 15px 22px;
+    margin: 0 10px 0 0;
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    box-sizing: border-box;
+}
+
+.searchform__button {
+    width: 70px;
+    height: 44px;
+    font-family: 'Inter', 'Arial', sans-serif;
+    border-style: none;
+    cursor: pointer;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+    text-align: center;
+    color: #fff;
+    background: #3456F3;
+    border-radius: 3px;
+}
+
+.searchform__button:hover {
+    opacity: .8;
+}
+
+.searchform__shorts {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 0 39px 0;
+    border-bottom: 1px solid #E8E8E8;
+}
+
+.searchform__label {
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    color: #000000;
+    margin: 0;
+    padding: 0;
+}
+
+.searchform__shorts-input {
+    position: relative;
+    appearance: none;
+    width: 36px;
+    height: 20px;
+    margin: 0 12px 0 0;
+    box-shadow: 0px 4px 4px rgba(50, 50, 71, 0.08), 0px 4px 8px rgba(50, 50, 71, 0.06);
+    border-radius: 16px;
+}
+
+.searchform__shorts-input:before {
+    content: '';
+    background: #F5F5F5;
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    transition: .3s;
+}
+
+.searchform__shorts-input:checked:before {
+    left: 18px;
+    background: #2BE080;
+}
+
+@media screen and (max-width: 768px) {
+    .searchform {
+        padding: 0 30px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .searchform {
+        padding: 0 14px;
+    }
+
+    .searchform__field {
+        margin-bottom: 44px;
+    }
+
+    .searchform__button {
+        width: 70px;
+    }
+
+    .searchform__shorts {
+        padding-bottom: 44px;
+    }
+}
