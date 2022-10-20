@@ -83,6 +83,7 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
+        signOut();
       });
   };
   const resetError = () => {
@@ -99,7 +100,9 @@ function App() {
           message: 'Вы успешно зарегистрировались!',
         });
         setIsInfoTooltipOpen(true);
-        history.push('/signin');
+      })
+      .then(() => {
+        handleAuthorization(password, email);
       })
       .catch((e) => {
         setServerResponseError(serverErrorHandler(e));
@@ -203,16 +206,17 @@ function App() {
     mainapi
       .deleteMovie(movie)
       .then(() => {
-        setSavedMovies((movies) => movies.filter((item) => item !== movie));
-      })
-      .then(() => {
         mainapi
           .getMovies()
           .then((data) => setSavedMovies(data))
           .catch((e) => {
             setServerResponseError(serverErrorHandler(e));
           });
+        // setSavedMovies((movies) => movies.filter((item) => item !== movie));
       })
+      // .then(() => {
+
+      // })
       .catch((e) => {
         setServerResponseError(serverErrorHandler(e));
       })
@@ -223,19 +227,7 @@ function App() {
     resetError();
     setIsRenderLoading(true);
     mainapi
-      .saveMovie({
-        country: movie.country,
-        director: movie.director,
-        duration: movie.duration,
-        year: movie.year,
-        description: movie.description,
-        image: `https://api.nomoreparties.co/${movie.image.url}`,
-        trailerLink: movie.trailerLink,
-        thumbnail: `https://api.nomoreparties.co/${movie.image.formats.thumbnail.url}`,
-        nameRU: movie.nameRU,
-        nameEN: movie.nameEN,
-        movieId: movie.id,
-      })
+      .saveMovie(movie)
       .then(() => {
         mainapi
           .getMovies()
@@ -294,6 +286,7 @@ function App() {
               getSavedMovies={getSavedMovies}
               serverResponseError={serverResponseError}
               resetError={resetError}
+              // findMovies={findMovies}
               path='/saved-movies'
             ></ProtectedRoute>
 

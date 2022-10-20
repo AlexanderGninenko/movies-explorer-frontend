@@ -1,5 +1,3 @@
-import { NavLink } from 'react-router-dom';
-
 const MoviesCard = ({ movie, onSaveMovie, savedMovies, onDeleteMovie }) => {
   const handleSaveMovie = () => {
     onSaveMovie(movie);
@@ -14,13 +12,13 @@ const MoviesCard = ({ movie, onSaveMovie, savedMovies, onDeleteMovie }) => {
 
   return (
     <div className='moviecard'>
-      <NavLink to={movie.trailerLink} target='_blank'>
+      <a href={movie.trailerLink} target='_blank' rel='noreferrer'>
         <img
           src={`https://api.nomoreparties.co/${movie.image.url}`}
           alt='Постер фильма'
           className='moviecard__image'
         />
-      </NavLink>
+      </a>
       <div className='moviecard__description'>
         <div className='moviecard__title-block'>
           <p className='moviecard__title'>{movie.nameRU}</p>

@@ -3,19 +3,22 @@ import SearchForm from './SearchForm/SearchForm';
 import { useState, useEffect } from 'react';
 import useWindowDimensions from './../../hooks/useWindowDimensions';
 import {
+  LARGE_TAB_INITIAL_MOVIES,
+  MINI_TAB_EXTRA_ROW,
+  MINI_TAB_INITIAL_MOVIES,
+  MINI_TAB_WIDTH,
   DESKTOP_WIDTH,
   LARGE_DESKTOP_EXTRA_ROW,
   LARGE_DESKTOP_INITIAL_MOVIES,
   TAB_INITIAL_MOVIES,
-  MOBILE_WIDTH,
-  MOBILE_EXTRA_ROW,
   MINI_MOBILE_INITIAL_MOVIES,
   MINI_MOBILE_EXTRA_ROW,
   MINI_MOBILE_WIDTH,
-  MOBILE_INITIAL_MOVIES,
   SHORT_MOVIE_DURATION,
   TAB_EXTRA_ROW,
   TAB_WIDTH,
+  LARGE_TAB_WIDTH,
+  LARGE_TAB_EXTRA_ROW,
 } from '../../utils/constants';
 
 function Movies({
@@ -65,20 +68,22 @@ function Movies({
     if (width > DESKTOP_WIDTH) {
       setMoviesCount(LARGE_DESKTOP_INITIAL_MOVIES);
       setExtraMoviesCount(LARGE_DESKTOP_EXTRA_ROW);
-    } else if (width <= DESKTOP_WIDTH && width > TAB_WIDTH) {
+    } else if (width >= LARGE_TAB_WIDTH && width <= DESKTOP_WIDTH) {
+      setMoviesCount(LARGE_TAB_INITIAL_MOVIES);
+      setExtraMoviesCount(LARGE_TAB_EXTRA_ROW);
+    } else if (width >= TAB_WIDTH && width < LARGE_TAB_WIDTH) {
       setMoviesCount(TAB_INITIAL_MOVIES);
       setExtraMoviesCount(TAB_EXTRA_ROW);
-    } else if (width <= TAB_WIDTH && width > MOBILE_WIDTH) {
-      setMoviesCount(MOBILE_INITIAL_MOVIES);
-      setExtraMoviesCount(MOBILE_EXTRA_ROW);
-    } else if (width <= MOBILE_WIDTH && width >= MINI_MOBILE_WIDTH) {
+    } else if (width >= MINI_TAB_WIDTH && width < TAB_WIDTH) {
+      setMoviesCount(MINI_TAB_INITIAL_MOVIES);
+      setExtraMoviesCount(MINI_TAB_EXTRA_ROW);
+    } else if (width >= MINI_MOBILE_WIDTH && width < MINI_TAB_WIDTH) {
       setMoviesCount(MINI_MOBILE_INITIAL_MOVIES);
       setExtraMoviesCount(MINI_MOBILE_EXTRA_ROW);
     }
   }, [width]);
 
   useEffect(() => {
-    console.log(moviesCount, foundMovies.length);
     if (
       foundMovies.length === moviesCount ||
       foundMovies.length < moviesCount

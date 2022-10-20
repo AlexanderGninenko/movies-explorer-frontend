@@ -55,7 +55,7 @@ function Profile({ onSignOut, onUpdateUser, serverResponseError, resetError }) {
               required: 'Введите имя',
               minLength: { value: 2, message: 'Минимум 2 символа' },
               pattern: {
-                value: /^[A-Za-zА-Яа-я]+$/,
+                value: /^[A-Za-zА-Яа-я -]+$/,
                 message: 'Допустимы только буквы',
               },
             })}

@@ -9,8 +9,9 @@ const SavedMovies = ({
   serverResponseError,
   resetError,
   getSavedMovies,
+  // findMovies,
 }) => {
-  const [foundMovies, setFoundMovies] = useState([]);
+  const [foundSavedMovies, setFoundSavedMovies] = useState([]);
   const [isShortsToggled, setIsShortsToggled] = useState(false);
   const [isSearched, setIsSearched] = useState(false);
 
@@ -19,20 +20,18 @@ const SavedMovies = ({
   }, []);
 
   const findMovies = (value = '') => {
-    // setSearchQuery(value);
     if (savedMovies.length) {
-      setFoundMovies(
+      setFoundSavedMovies(
         savedMovies.filter((movie) =>
           isShortsToggled
-            ? (movie.nameRU.toLowerCase().includes(value) &&
+            ? (movie.nameRU.toLowerCase().includes(value.toLowerCase()) &&
                 movie.duration <= SHORT_MOVIE_DURATION) ||
-              (movie.nameEN.toLowerCase().includes(value) &&
+              (movie.nameEN.toLowerCase().includes(value.toLowerCase()) &&
                 movie.duration <= SHORT_MOVIE_DURATION)
-            : movie.nameRU.toLowerCase().includes(value) ||
-              movie.nameEN.toLowerCase().includes(value)
+            : movie.nameRU.toLowerCase().includes(value.toLowerCase()) ||
+              movie.nameEN.toLowerCase().includes(value.toLowerCase())
         )
       );
-      // setLocalSavedMovies(true);
       setIsSearched(true);
     } else {
       getSavedMovies();
@@ -51,11 +50,12 @@ const SavedMovies = ({
       />
       <SavedMoviesCardList
         isSearched={isSearched}
-        foundMovies={foundMovies}
+        foundSavedMovies={foundSavedMovies}
         savedMovies={savedMovies}
         onDeleteMovie={onDeleteMovie}
         serverResponseError={serverResponseError}
         resetError={resetError}
+        getSavedMovies={getSavedMovies}
       />
     </section>
   );

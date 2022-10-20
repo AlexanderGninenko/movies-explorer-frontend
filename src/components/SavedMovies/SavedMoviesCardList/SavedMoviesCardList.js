@@ -1,10 +1,10 @@
 import SavedMoviesCard from '../SavedMoviesCard/SavedMoviesCard';
 import { useEffect } from 'react';
 
-const MoviesCardList = ({
+const SavedMoviesCardList = ({
   savedMovies,
   onDeleteMovie,
-  foundMovies,
+  foundSavedMovies,
   isSearched,
   serverResponseError,
   resetError,
@@ -12,6 +12,7 @@ const MoviesCardList = ({
   useEffect(() => {
     resetError();
   }, []);
+
   return (
     <div className='moviescardlist'>
       {serverResponseError && (
@@ -26,7 +27,7 @@ const MoviesCardList = ({
           Здесь пока ничего нет
         </p>
       )}
-      {isSearched && !foundMovies.length && (
+      {isSearched && !foundSavedMovies.length && (
         <p
           className={`moviescardlist__notfound ${
             (serverResponseError || !savedMovies.length) && 'hidden'
@@ -35,7 +36,17 @@ const MoviesCardList = ({
           Ничего не найдено
         </p>
       )}
-      {(isSearched ? foundMovies : savedMovies).map((movie) => (
+      {/* {isSearched &&
+        foundMovies.length &&
+        foundMovies.map((movie) => (
+          <SavedMoviesCard
+            onDeleteMovie={onDeleteMovie}
+            movie={movie}
+            key={movie._id}
+            serverResponseError={serverResponseError}
+          />
+        ))} */}
+      {(isSearched ? foundSavedMovies : savedMovies).map((movie) => (
         <SavedMoviesCard
           onDeleteMovie={onDeleteMovie}
           movie={movie}
@@ -47,4 +58,4 @@ const MoviesCardList = ({
   );
 };
 
-export default MoviesCardList;
+export default SavedMoviesCardList;

@@ -1,12 +1,22 @@
 export const LARGE_DESKTOP_EXTRA_ROW = 5;
 export const LARGE_DESKTOP_INITIAL_MOVIES = 15;
 export const DESKTOP_WIDTH = 1280;
+
+export const LARGE_TAB_EXTRA_ROW = 4;
+export const LARGE_TAB_INITIAL_MOVIES = 12;
+export const LARGE_TAB_WIDTH = 1156;
+
 export const TAB_EXTRA_ROW = 3;
-export const TAB_INITIAL_MOVIES = 12;
-export const TAB_WIDTH = 768;
-export const MOBILE_EXTRA_ROW = 2;
-export const MOBILE_INITIAL_MOVIES = 8;
-export const MOBILE_WIDTH = 480;
+export const TAB_INITIAL_MOVIES = 9;
+export const TAB_WIDTH = 867;
+
+export const MINI_TAB_EXTRA_ROW = 2;
+export const MINI_TAB_INITIAL_MOVIES = 8;
+export const MINI_TAB_WIDTH = 710;
+
+// export const MOBILE_EXTRA_ROW = 2;
+// export const MOBILE_INITIAL_MOVIES = 8;
+// export const MOBILE_WIDTH = 480;
 export const MINI_MOBILE_EXTRA_ROW = 2;
 export const MINI_MOBILE_INITIAL_MOVIES = 5;
 export const MINI_MOBILE_WIDTH = 320;
