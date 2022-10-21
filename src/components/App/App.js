@@ -73,15 +73,15 @@ function App() {
     setFoundMovies(
       movies.filter((movie) =>
         isShortsToggled
-          ? (movie.nameRU.toLowerCase().includes(value) &&
+          ? (movie.nameRU.toLowerCase().includes(value.toLowerCase()) &&
               movie.duration <= SHORT_MOVIE_DURATION) ||
-            (movie.nameEN.toLowerCase().includes(value) &&
+            (movie.nameEN.toLowerCase().includes(value.toLowerCase()) &&
               movie.duration <= SHORT_MOVIE_DURATION)
-          : movie.nameRU.toLowerCase().includes(value) ||
-            movie.nameEN.toLowerCase().includes(value)
+          : movie.nameRU.toLowerCase().includes(value.toLowerCase()) ||
+            movie.nameEN.toLowerCase().includes(value.toLowerCase())
       )
     );
-    localStorage.setItem('searchQuery', value);
+    localStorage.setItem('searchQuery', JSON.stringify(value));
     localStorage.setItem('isShortsToggled', JSON.stringify(isShortsToggled));
     setIsSearched(true);
   };
