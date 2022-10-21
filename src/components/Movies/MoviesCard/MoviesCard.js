@@ -1,14 +1,19 @@
-const MoviesCard = ({ movie, onSaveMovie, savedMovies, onDeleteMovie }) => {
+const MoviesCard = ({
+  movie,
+  onSaveMovie,
+  foundSavedMovies,
+  onDeleteMovie,
+}) => {
   const handleSaveMovie = () => {
     onSaveMovie(movie);
   };
 
   const handleDeleteMovie = () => {
-    const movieToDelete = savedMovies.find((i) => i.movieId === movie.id);
+    const movieToDelete = foundSavedMovies.find((i) => i.movieId === movie.id);
     onDeleteMovie(movieToDelete._id);
   };
 
-  const isSaved = savedMovies.some((i) => i.movieId === movie.id);
+  const isSaved = foundSavedMovies.some((i) => i.movieId === movie.id);
 
   return (
     <div className='moviecard'>

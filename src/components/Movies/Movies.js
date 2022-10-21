@@ -14,7 +14,6 @@ import {
   MINI_MOBILE_INITIAL_MOVIES,
   MINI_MOBILE_EXTRA_ROW,
   MINI_MOBILE_WIDTH,
-  SHORT_MOVIE_DURATION,
   TAB_EXTRA_ROW,
   TAB_WIDTH,
   LARGE_TAB_WIDTH,
@@ -22,42 +21,18 @@ import {
 } from '../../utils/constants';
 
 function Movies({
-  movies,
-  savedMovies,
+  foundSavedMovies,
   onDeleteMovie,
   onSaveMovie,
   serverResponseError,
   resetError,
-  getMovies,
+  findMovies,
+  foundMovies,
+  isSearched,
 }) {
-  const [foundMovies, setFoundMovies] = useState([]);
-  const [localSavedMovies, setLocalSavedMovies] = useState(false);
-  const [isShortsToggled, setIsShortsToggled] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [isNothingFound, setIsNothingFound] = useState(false);
-  const [isSearched, setIsSearched] = useState(false);
   const [isDisabledButton, setIsDisabledButton] = useState(false);
   const [moviesCount, setMoviesCount] = useState(0);
   const [extraMoviesCount, setExtraMoviesCount] = useState(0);
-
-  useEffect(() => {
-    if (foundMovies.length) {
-      localStorage.setItem('movies', JSON.stringify(foundMovies));
-      localStorage.setItem('searchQuery', JSON.stringify(searchQuery));
-      localStorage.setItem('shortsToggled', JSON.stringify(isShortsToggled));
-      setLocalSavedMovies(true);
-      setIsNothingFound(false);
-    } else if (!foundMovies.length) {
-      if (isSearched) {
-        setIsNothingFound(true);
-      } else if (localStorage.getItem('movies')) {
-        setFoundMovies(JSON.parse(localStorage.getItem('movies')));
-        setSearchQuery(JSON.parse(localStorage.getItem('searchQuery')));
-        setIsShortsToggled(JSON.parse(localStorage.getItem('shortsToggled')));
-        setLocalSavedMovies(true);
-      } else setIsNothingFound(false);
-    } else setLocalSavedMovies(false);
-  }, [foundMovies, isShortsToggled, searchQuery, isSearched]);
 
   useEffect(() => {
     resetError();
@@ -96,57 +71,23 @@ function Movies({
     setMoviesCount(moviesCount + extraMoviesCount);
   };
 
-  const findMovies = (value) => {
-    resetError();
-    setSearchQuery(value);
-
-    if (movies.length) {
-      setFoundMovies(
-        movies.filter((movie) =>
-          isShortsToggled
-            ? (movie.nameRU.toLowerCase().includes(value) &&
-                movie.duration <= SHORT_MOVIE_DURATION) ||
-              (movie.nameEN.toLowerCase().includes(value) &&
-                movie.duration <= SHORT_MOVIE_DURATION)
-            : movie.nameRU.toLowerCase().includes(value) ||
-              movie.nameEN.toLowerCase().includes(value)
-        )
-      );
-      setLocalSavedMovies(true);
-      setIsSearched(true);
-    } else {
-      getMovies();
-    }
-  };
-
-  const toggleShorts = () => {
-    setIsShortsToggled(!isShortsToggled);
-  };
-
   return (
     <section className='movies'>
-      <SearchForm
-        findMovies={findMovies}
-        toggleShorts={toggleShorts}
-        isShortsToggled={isShortsToggled}
-        searchQuery={searchQuery}
-      />
+      <SearchForm findMovies={findMovies} />
 
       <MoviesCardList
-        savedMovies={savedMovies}
+        foundSavedMovies={foundSavedMovies}
         onDeleteMovie={onDeleteMovie}
         onSaveMovie={onSaveMovie}
-        isNothingFound={isNothingFound}
-        localSavedMovies={localSavedMovies}
-        movies={foundMovies}
+        foundMovies={foundMovies}
         moviesCount={moviesCount}
         serverResponseError={serverResponseError}
         resetError={resetError}
+        isSearched={isSearched}
       />
       <button
         className={`movies__more ${
-          (isDisabledButton || isNothingFound || !localSavedMovies) &&
-          'movies__more_hidden'
+          (isDisabledButton || !foundMovies.length) && 'movies__more_hidden'
         }`}
         onClick={showMore}
       >

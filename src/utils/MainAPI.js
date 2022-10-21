@@ -6,11 +6,6 @@ const checkResponse = (res) => {
     return res.json();
   }
   return Promise.reject(res.status);
-
-  // return res.json().then((res) => {
-  //   console.log(res.message);
-  //   throw new Error(res.message);
-  // });
 };
 
 export const getMovies = () => {

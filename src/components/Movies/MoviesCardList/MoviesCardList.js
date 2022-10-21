@@ -1,18 +1,32 @@
 import MoviesCard from '../MoviesCard/MoviesCard';
+import { useEffect, useState } from 'react';
 
 const MoviesCardList = ({
-  movies,
+  foundMovies,
   moviesCount,
-  localSavedMovies,
-  isNothingFound,
   serverResponseError,
   onSaveMovie,
-  savedMovies,
+  foundSavedMovies,
   onDeleteMovie,
+  isSearched,
 }) => {
+  const [localSavedMovies, setLocalSavedMovies] = useState([]);
+
+  useEffect(() => {
+    if (foundMovies.length) {
+      localStorage.setItem('movies', JSON.stringify(foundMovies));
+      setLocalSavedMovies(JSON.parse(localStorage.getItem('movies')));
+    }
+    setLocalSavedMovies([]);
+  }, [foundMovies]);
+
+  useEffect(() => {
+    setLocalSavedMovies(JSON.parse(localStorage.getItem('movies')));
+  }, []);
+
   return (
     <div className='moviescardlist'>
-      {isNothingFound && (
+      {!foundMovies.length && isSearched && (
         <p
           className={`moviescardlist__notfound ${
             serverResponseError && 'hidden'
@@ -21,20 +35,21 @@ const MoviesCardList = ({
           Ничего не найдено
         </p>
       )}
-      {(serverResponseError || !localSavedMovies) && (
+      {serverResponseError && (
         <p className='moviescardlist__error'>{serverResponseError}</p>
       )}
-      {
+
+      {!localSavedMovies && (
         <p
           className={`moviescardlist__welcome-message ${
-            (localSavedMovies || serverResponseError) && 'hidden'
+            serverResponseError && 'hidden'
           }`}
         >
           Начните поиск
         </p>
-      }
+      )}
       {localSavedMovies &&
-        movies
+        (!foundMovies.length ? localSavedMovies : foundMovies)
           .slice(0, moviesCount)
           .map((movie) => (
             <MoviesCard
@@ -42,7 +57,7 @@ const MoviesCardList = ({
               onSaveMovie={onSaveMovie}
               movie={movie}
               key={movie.id}
-              savedMovies={savedMovies}
+              foundSavedMovies={foundSavedMovies}
             />
           ))}
     </div>

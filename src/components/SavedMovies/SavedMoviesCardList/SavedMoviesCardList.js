@@ -27,7 +27,7 @@ const SavedMoviesCardList = ({
           Здесь пока ничего нет
         </p>
       )}
-      {isSearched && !foundSavedMovies.length && (
+      {!foundSavedMovies.length && isSearched && (
         <p
           className={`moviescardlist__notfound ${
             (serverResponseError || !savedMovies.length) && 'hidden'
@@ -36,22 +36,11 @@ const SavedMoviesCardList = ({
           Ничего не найдено
         </p>
       )}
-      {/* {isSearched &&
-        foundMovies.length &&
-        foundMovies.map((movie) => (
-          <SavedMoviesCard
-            onDeleteMovie={onDeleteMovie}
-            movie={movie}
-            key={movie._id}
-            serverResponseError={serverResponseError}
-          />
-        ))} */}
-      {(isSearched ? foundSavedMovies : savedMovies).map((movie) => (
+      {foundSavedMovies.map((movie) => (
         <SavedMoviesCard
           onDeleteMovie={onDeleteMovie}
           movie={movie}
           key={movie._id}
-          serverResponseError={serverResponseError}
         />
       ))}
     </div>

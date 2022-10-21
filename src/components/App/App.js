@@ -24,6 +24,7 @@ import Footer from '../Footer/Footer';
 import * as mainapi from '../../utils/MainAPI';
 import * as moviesapi from '../../utils/MoviesAPI';
 import { serverErrorHandler } from '../../utils/errorHandler';
+import { SHORT_MOVIE_DURATION } from './../../utils/constants';
 
 function App() {
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
@@ -35,18 +36,62 @@ function App() {
   const [movies, setMovies] = React.useState([]);
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [serverResponseError, setServerResponseError] = React.useState('');
-
+  const [isSearched, setIsSearched] = React.useState(false);
   const [savedMovies, setSavedMovies] = React.useState([]);
+  const [foundSavedMovies, setFoundSavedMovies] = React.useState([]);
+  const [foundMovies, setFoundMovies] = React.useState([]);
 
   const [isBurgerMenuOpen, setIsBurgerMenuOpen] = React.useState(false);
 
   const history = useHistory();
   const localToken = localStorage.getItem('token');
 
+  const findSavedMovies = (value = '', isShortsToggled) => {
+    if (!value && !isShortsToggled) {
+      getSavedMovies();
+      setFoundSavedMovies(savedMovies);
+    }
+    setFoundSavedMovies(
+      savedMovies.filter((movie) =>
+        isShortsToggled
+          ? (movie.nameRU.toLowerCase().includes(value.toLowerCase()) &&
+              movie.duration <= SHORT_MOVIE_DURATION) ||
+            (movie.nameEN.toLowerCase().includes(value.toLowerCase()) &&
+              movie.duration <= SHORT_MOVIE_DURATION)
+          : movie.nameRU.toLowerCase().includes(value.toLowerCase()) ||
+            movie.nameEN.toLowerCase().includes(value.toLowerCase())
+      )
+    );
+    setIsSearched(true);
+  };
+
+  const findMovies = (value = '', isShortsToggled) => {
+    if (!value && !isShortsToggled) {
+      getMoviesfromBeatFilm();
+      setFoundMovies(movies);
+    }
+    setFoundMovies(
+      movies.filter((movie) =>
+        isShortsToggled
+          ? (movie.nameRU.toLowerCase().includes(value) &&
+              movie.duration <= SHORT_MOVIE_DURATION) ||
+            (movie.nameEN.toLowerCase().includes(value) &&
+              movie.duration <= SHORT_MOVIE_DURATION)
+          : movie.nameRU.toLowerCase().includes(value) ||
+            movie.nameEN.toLowerCase().includes(value)
+      )
+    );
+    localStorage.setItem('searchQuery', value);
+    localStorage.setItem('isShortsToggled', JSON.stringify(isShortsToggled));
+    setIsSearched(true);
+  };
+
   const getMoviesfromBeatFilm = () => {
     moviesapi
       .getMovies()
-      .then((data) => setMovies(data))
+      .then((data) => {
+        setMovies(data);
+      })
       .catch((e) => {
         setServerResponseError(serverErrorHandler(e));
       });
@@ -55,7 +100,10 @@ function App() {
   const getSavedMovies = () => {
     mainapi
       .getMovies()
-      .then((data) => setSavedMovies(data))
+      .then((data) => {
+        setFoundSavedMovies(data);
+        setSavedMovies(data);
+      })
       .catch((e) => {
         setServerResponseError(serverErrorHandler(e));
       });
@@ -208,15 +256,14 @@ function App() {
       .then(() => {
         mainapi
           .getMovies()
-          .then((data) => setSavedMovies(data))
+          .then((data) => {
+            setSavedMovies(data);
+            setFoundSavedMovies(data);
+          })
           .catch((e) => {
             setServerResponseError(serverErrorHandler(e));
           });
-        // setSavedMovies((movies) => movies.filter((item) => item !== movie));
       })
-      // .then(() => {
-
-      // })
       .catch((e) => {
         setServerResponseError(serverErrorHandler(e));
       })
@@ -231,7 +278,10 @@ function App() {
       .then(() => {
         mainapi
           .getMovies()
-          .then((data) => setSavedMovies(data))
+          .then((data) => {
+            setSavedMovies(data);
+            setFoundSavedMovies(data);
+          })
           .catch((e) => {
             setServerResponseError(serverErrorHandler(e));
           });
@@ -257,18 +307,23 @@ function App() {
             <Route exact path='/'>
               <Main />
             </Route>
+
             <ProtectedRoute
               loggedIn={localToken}
               component={Movies}
               movies={movies}
               getMovies={getMoviesfromBeatFilm}
               onDeleteMovie={handleDeleteMovie}
-              savedMovies={savedMovies}
+              foundSavedMovies={foundSavedMovies}
+              findMovies={findMovies}
+              foundMovies={foundMovies}
               onSaveMovie={handleSaveMovie}
               serverResponseError={serverResponseError}
               resetError={resetError}
+              isSearched={isSearched}
               path='/movies'
             ></ProtectedRoute>
+
             <ProtectedRoute
               loggedIn={localToken}
               path='/profile'
@@ -278,15 +333,17 @@ function App() {
               serverResponseError={serverResponseError}
               resetError={resetError}
             ></ProtectedRoute>
+
             <ProtectedRoute
               loggedIn={localToken}
               component={SavedMovies}
               onDeleteMovie={handleDeleteMovie}
               savedMovies={savedMovies}
-              getSavedMovies={getSavedMovies}
               serverResponseError={serverResponseError}
               resetError={resetError}
-              // findMovies={findMovies}
+              findSavedMovies={findSavedMovies}
+              foundSavedMovies={foundSavedMovies}
+              isSearched={isSearched}
               path='/saved-movies'
             ></ProtectedRoute>
 

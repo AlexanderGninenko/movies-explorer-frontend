@@ -1,5 +1,3 @@
-import { NavLink } from 'react-router-dom';
-
 const MoviesCard = ({ movie, onDeleteMovie }) => {
   const handleDeleteMovie = (e) => {
     e.preventDefault();
@@ -7,13 +5,13 @@ const MoviesCard = ({ movie, onDeleteMovie }) => {
   };
   return (
     <div className='moviecard'>
-      <NavLink to={movie.trailerLink} target='_blank'>
+      <a href={movie.trailerLink} target='_blank' rel='noreferrer'>
         <img
           src={movie.image}
           alt='Постер фильма'
           className='moviecard__image'
         />
-      </NavLink>
+      </a>
       <div className='moviecard__description'>
         <div className='moviecard__title-block'>
           <p className='moviecard__title'>{movie.nameRU}</p>
