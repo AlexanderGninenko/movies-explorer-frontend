@@ -1,5 +1,5 @@
-export const LARGE_DESKTOP_EXTRA_ROW = 5;
-export const LARGE_DESKTOP_INITIAL_MOVIES = 15;
+export const LARGE_DESKTOP_EXTRA_ROW = 4;
+export const LARGE_DESKTOP_INITIAL_MOVIES = 12;
 export const DESKTOP_WIDTH = 1280;
 
 export const LARGE_TAB_EXTRA_ROW = 4;

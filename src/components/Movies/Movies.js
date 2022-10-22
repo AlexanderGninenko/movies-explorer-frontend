@@ -30,10 +30,19 @@ function Movies({
   foundMovies,
   isSearched,
 }) {
-  const [isDisabledButton, setIsDisabledButton] = useState(false);
   const [moviesCount, setMoviesCount] = useState(0);
   const [extraMoviesCount, setExtraMoviesCount] = useState(0);
+  const [localSavedMovies, setLocalSavedMovies] = useState([]);
 
+  useEffect(() => {
+    if (foundMovies.length) {
+      setLocalSavedMovies(JSON.parse(localStorage.getItem('movies')));
+    }
+    setLocalSavedMovies([]);
+  }, [foundMovies]);
+  useEffect(() => {
+    setLocalSavedMovies(JSON.parse(localStorage.getItem('movies')));
+  }, []);
   useEffect(() => {
     resetError();
   }, []);
@@ -58,15 +67,6 @@ function Movies({
     }
   }, [width]);
 
-  useEffect(() => {
-    if (
-      foundMovies.length === moviesCount ||
-      foundMovies.length < moviesCount
-    ) {
-      setIsDisabledButton(true);
-    } else setIsDisabledButton(false);
-  }, [moviesCount, foundMovies.length]);
-
   const showMore = () => {
     setMoviesCount(moviesCount + extraMoviesCount);
   };
@@ -84,15 +84,14 @@ function Movies({
         serverResponseError={serverResponseError}
         resetError={resetError}
         isSearched={isSearched}
+        setLocalSavedMovies={setLocalSavedMovies}
       />
-      <button
-        className={`movies__more ${
-          (isDisabledButton || !foundMovies.length) && 'movies__more_hidden'
-        }`}
-        onClick={showMore}
-      >
-        Ещё
-      </button>
+      {(foundMovies.length > moviesCount ||
+        localSavedMovies.length > moviesCount) && (
+        <button className={`movies__more`} onClick={showMore}>
+          Ещё
+        </button>
+      )}
     </section>
   );
 }

@@ -5,7 +5,10 @@ const SearchForm = ({ findMovies }) => {
   const [isShortsToggled, setIsShortsToggled] = useState(false);
 
   useEffect(() => {
-    setValue(JSON.parse(localStorage.getItem('searchQuery')));
+    if (localStorage.getItem('searchQuery')) {
+      setValue(JSON.parse(localStorage.getItem('searchQuery')));
+    }
+    setValue('');
     setIsShortsToggled(JSON.parse(localStorage.getItem('isShortsToggled')));
   }, []);
 

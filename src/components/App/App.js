@@ -25,6 +25,7 @@ import * as mainapi from '../../utils/MainAPI';
 import * as moviesapi from '../../utils/MoviesAPI';
 import { serverErrorHandler } from '../../utils/errorHandler';
 import { SHORT_MOVIE_DURATION } from './../../utils/constants';
+import AuthRoute from './../AuthRoute/AuthRoute';
 
 function App() {
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
@@ -195,25 +196,28 @@ function App() {
       .signOut()
       .then(() => {
         setLoggedIn(false);
-        localStorage.removeItem('token');
-        localStorage.removeItem('movies');
-        localStorage.removeItem('searchQuery');
-        localStorage.removeItem('shortsToggled');
-        setInfoTooltipData({
-          image: 'success',
-          message: 'Вы успешно вышли',
-        });
-        history.push('/signin');
+        localStorage.clear();
+        setSavedMovies([]);
+        setFoundSavedMovies([]);
+        setFoundMovies([]);
+        setMovies([]);
+        setIsSearched(false);
+
+        // setInfoTooltipData({
+        //   image: 'success',
+        //   message: 'Вы успешно вышли',
+        // });
+        // history.push('/');
       })
       .catch((e) => {
         setServerResponseError(serverErrorHandler(e));
-        setInfoTooltipData({
-          image: 'fail',
-          message: 'Что-то пошло не так! Попробуйте ещё раз.',
-        });
+        // setInfoTooltipData({
+        //   image: 'fail',
+        //   message: 'Что-то пошло не так! Попробуйте ещё раз.',
+        // });
       })
       .finally(() => {
-        setIsInfoTooltipOpen(true);
+        // setIsInfoTooltipOpen(true);
         setIsRenderLoading(false);
       });
   };
@@ -347,22 +351,24 @@ function App() {
               path='/saved-movies'
             ></ProtectedRoute>
 
-            <Route path='/signup/'>
-              <Register
-                onRegister={handleRegistration}
-                isLoading={isRenderLoading}
-                serverResponseError={serverResponseError}
-                resetError={resetError}
-              />
-            </Route>
-            <Route path='/signin'>
-              <Login
-                onLogin={handleAuthorization}
-                isLoading={isRenderLoading}
-                serverResponseError={serverResponseError}
-                resetError={resetError}
-              />
-            </Route>
+            <AuthRoute
+              loggedIn={localToken}
+              component={Register}
+              onRegister={handleRegistration}
+              isLoading={isRenderLoading}
+              serverResponseError={serverResponseError}
+              resetError={resetError}
+              path='/signup/'
+            ></AuthRoute>
+            <AuthRoute
+              loggedIn={localToken}
+              component={Login}
+              path='/signin'
+              onLogin={handleAuthorization}
+              isLoading={isRenderLoading}
+              serverResponseError={serverResponseError}
+              resetError={resetError}
+            ></AuthRoute>
             <Route path='/404'>
               <NotFound onGoBack={handleGoBack} />
             </Route>
