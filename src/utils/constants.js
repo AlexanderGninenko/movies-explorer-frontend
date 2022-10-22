@@ -14,9 +14,6 @@ export const MINI_TAB_EXTRA_ROW = 2;
 export const MINI_TAB_INITIAL_MOVIES = 8;
 export const MINI_TAB_WIDTH = 710;
 
-// export const MOBILE_EXTRA_ROW = 2;
-// export const MOBILE_INITIAL_MOVIES = 8;
-// export const MOBILE_WIDTH = 480;
 export const MINI_MOBILE_EXTRA_ROW = 2;
 export const MINI_MOBILE_INITIAL_MOVIES = 5;
 export const MINI_MOBILE_WIDTH = 320;

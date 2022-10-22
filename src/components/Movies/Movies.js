@@ -51,15 +51,24 @@ function Movies({
 
   const { width } = useWindowDimensions();
   useEffect(() => {
-    if (width > DESKTOP_WIDTH) {
+    if (width >= 1471) {
+      setMoviesCount(12);
+      setExtraMoviesCount(4);
+    } else if (width > DESKTOP_WIDTH && width <= 1470) {
       setMoviesCount(LARGE_DESKTOP_INITIAL_MOVIES);
       setExtraMoviesCount(LARGE_DESKTOP_EXTRA_ROW);
-    } else if (width >= LARGE_TAB_WIDTH && width <= DESKTOP_WIDTH) {
+    } else if (width >= 1157 && width <= 1175) {
+      setMoviesCount(9);
+      setExtraMoviesCount(3);
+    } else if (width > LARGE_TAB_WIDTH && width <= DESKTOP_WIDTH) {
       setMoviesCount(LARGE_TAB_INITIAL_MOVIES);
       setExtraMoviesCount(LARGE_TAB_EXTRA_ROW);
-    } else if (width >= TAB_WIDTH && width < LARGE_TAB_WIDTH) {
+    } else if (width >= 874 && width < LARGE_TAB_WIDTH) {
       setMoviesCount(TAB_INITIAL_MOVIES);
       setExtraMoviesCount(TAB_EXTRA_ROW);
+    } else if (width >= 865 && width <= 873) {
+      setMoviesCount(8);
+      setExtraMoviesCount(2);
     } else if (width >= MINI_TAB_WIDTH && width < TAB_WIDTH) {
       setMoviesCount(MINI_TAB_INITIAL_MOVIES);
       setExtraMoviesCount(MINI_TAB_EXTRA_ROW);
