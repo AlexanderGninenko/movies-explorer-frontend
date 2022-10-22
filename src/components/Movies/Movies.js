@@ -41,7 +41,9 @@ function Movies({
     setLocalSavedMovies([]);
   }, [foundMovies]);
   useEffect(() => {
-    setLocalSavedMovies(JSON.parse(localStorage.getItem('movies')));
+    if (localStorage.getItem('movies')) {
+      setLocalSavedMovies(JSON.parse(localStorage.getItem('movies')));
+    }
   }, []);
   useEffect(() => {
     resetError();
