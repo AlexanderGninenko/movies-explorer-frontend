@@ -4,9 +4,11 @@ const checkResponse = (res) => {
   if (res.ok) {
     return res.json();
   }
-  return res.json().then((res) => {
-    throw new Error(res.message);
-  });
+  return Promise.reject(res);
+
+  // return res.json().then((res) => {
+  //   throw new Error(res.message);
+  // });
 };
 
 export const getMovies = () => {

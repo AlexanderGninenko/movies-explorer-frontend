@@ -1,20 +1,16 @@
 import { useState, useEffect } from 'react';
 
-const SearchForm = ({ findMovies }) => {
+const SavedMoviesSearchForm = ({ findSavedMovies }) => {
   const [value, setValue] = useState('');
   const [isShortsToggled, setIsShortsToggled] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem('searchQuery')) {
-      setValue(JSON.parse(localStorage.getItem('searchQuery')));
-    }
-    setValue('');
-    setIsShortsToggled(JSON.parse(localStorage.getItem('isShortsToggled')));
+    setIsShortsToggled(false);
   }, []);
 
   const handleFindMovies = (e) => {
     e.preventDefault();
-    findMovies(value, isShortsToggled);
+    findSavedMovies(value, isShortsToggled);
   };
 
   const handleInputChange = (e) => {
@@ -24,7 +20,7 @@ const SearchForm = ({ findMovies }) => {
   const handleShortsToggle = () => {
     const shortsValue = !isShortsToggled;
     setIsShortsToggled(shortsValue);
-    findMovies(value, shortsValue);
+    findSavedMovies(value, shortsValue);
   };
 
   return (
@@ -58,4 +54,4 @@ const SearchForm = ({ findMovies }) => {
   );
 };
 
-export default SearchForm;
+export default SavedMoviesSearchForm;

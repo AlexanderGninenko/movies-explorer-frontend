@@ -1,47 +1,108 @@
 import MoviesCardList from './MoviesCardList/MoviesCardList';
 import SearchForm from './SearchForm/SearchForm';
-import * as moviesapi from '../../utils/MoviesAPI';
 import { useState, useEffect } from 'react';
+import useWindowDimensions from './../../hooks/useWindowDimensions';
+import {
+  LARGE_TAB_INITIAL_MOVIES,
+  MINI_TAB_EXTRA_ROW,
+  MINI_TAB_INITIAL_MOVIES,
+  MINI_TAB_WIDTH,
+  DESKTOP_WIDTH,
+  LARGE_DESKTOP_EXTRA_ROW,
+  LARGE_DESKTOP_INITIAL_MOVIES,
+  TAB_INITIAL_MOVIES,
+  MINI_MOBILE_INITIAL_MOVIES,
+  MINI_MOBILE_EXTRA_ROW,
+  MINI_MOBILE_WIDTH,
+  TAB_EXTRA_ROW,
+  TAB_WIDTH,
+  LARGE_TAB_WIDTH,
+  LARGE_TAB_EXTRA_ROW,
+} from '../../utils/constants';
 
-function Movies() {
-  const [movies, setMovies] = useState([]);
-  const [isRenderLoading, setIsRenderLoading] = useState(false);
-  const [moviesCount, setMoviesCount] = useState(95);
-
-  const [isDisabledButton, setIsDisabledButton] = useState(false);
+function Movies({
+  foundSavedMovies,
+  onDeleteMovie,
+  onSaveMovie,
+  serverResponseError,
+  resetError,
+  findMovies,
+  foundMovies,
+  isSearched,
+}) {
+  const [moviesCount, setMoviesCount] = useState(0);
+  const [extraMoviesCount, setExtraMoviesCount] = useState(0);
+  const [localSavedMovies, setLocalSavedMovies] = useState([]);
 
   useEffect(() => {
-    setIsRenderLoading(true);
-    moviesapi
-      .getMovies()
-      .then((data) => setMovies(data))
-      .catch((e) => console.log(e))
-      .finally(() => {
-        setIsRenderLoading(false);
-      });
+    if (foundMovies.length) {
+      setLocalSavedMovies(JSON.parse(localStorage.getItem('movies')));
+    }
+    setLocalSavedMovies([]);
+  }, [foundMovies]);
+  useEffect(() => {
+    if (localStorage.getItem('movies')) {
+      setLocalSavedMovies(JSON.parse(localStorage.getItem('movies')));
+    }
+  }, []);
+  useEffect(() => {
+    resetError();
   }, []);
 
+  const { width } = useWindowDimensions();
+  useEffect(() => {
+    if (width >= 1471) {
+      setMoviesCount(12);
+      setExtraMoviesCount(4);
+    } else if (width > DESKTOP_WIDTH && width <= 1470) {
+      setMoviesCount(LARGE_DESKTOP_INITIAL_MOVIES);
+      setExtraMoviesCount(LARGE_DESKTOP_EXTRA_ROW);
+    } else if (width >= 1157 && width <= 1175) {
+      setMoviesCount(9);
+      setExtraMoviesCount(3);
+    } else if (width > LARGE_TAB_WIDTH && width <= DESKTOP_WIDTH) {
+      setMoviesCount(LARGE_TAB_INITIAL_MOVIES);
+      setExtraMoviesCount(LARGE_TAB_EXTRA_ROW);
+    } else if (width >= 874 && width < LARGE_TAB_WIDTH) {
+      setMoviesCount(TAB_INITIAL_MOVIES);
+      setExtraMoviesCount(TAB_EXTRA_ROW);
+    } else if (width >= 865 && width <= 873) {
+      setMoviesCount(8);
+      setExtraMoviesCount(2);
+    } else if (width >= MINI_TAB_WIDTH && width < TAB_WIDTH) {
+      setMoviesCount(MINI_TAB_INITIAL_MOVIES);
+      setExtraMoviesCount(MINI_TAB_EXTRA_ROW);
+    } else if (width >= MINI_MOBILE_WIDTH && width < MINI_TAB_WIDTH) {
+      setMoviesCount(MINI_MOBILE_INITIAL_MOVIES);
+      setExtraMoviesCount(MINI_MOBILE_EXTRA_ROW);
+    }
+  }, [width]);
+
   const showMore = () => {
-    if (movies.length !== moviesCount) {
-      setMoviesCount(moviesCount + 5);
-      console.log(moviesCount);
-    } else setIsDisabledButton(true);
+    setMoviesCount(moviesCount + extraMoviesCount);
   };
 
   return (
     <section className='movies'>
-      <SearchForm />
+      <SearchForm findMovies={findMovies} />
+
       <MoviesCardList
-        movies={movies}
-        isRenderLoading={isRenderLoading}
+        foundSavedMovies={foundSavedMovies}
+        onDeleteMovie={onDeleteMovie}
+        onSaveMovie={onSaveMovie}
+        foundMovies={foundMovies}
         moviesCount={moviesCount}
+        serverResponseError={serverResponseError}
+        resetError={resetError}
+        isSearched={isSearched}
+        setLocalSavedMovies={setLocalSavedMovies}
       />
-      <button
-        className={`movies__more ${isDisabledButton && 'movies__more_hidden'}`}
-        onClick={showMore}
-      >
-        Ещё
-      </button>
+      {(foundMovies.length > moviesCount ||
+        localSavedMovies.length > moviesCount) && (
+        <button className={`movies__more`} onClick={showMore}>
+          Ещё
+        </button>
+      )}
     </section>
   );
 }

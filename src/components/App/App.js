@@ -21,46 +21,104 @@ import ProtectedRoute from './../ProtectedRoute/ProtectedRoute';
 import SavedMovies from './../SavedMovies/SavedMovies';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
-import { getMovies } from './../../utils/MoviesAPI';
+import * as mainapi from '../../utils/MainAPI';
+import * as moviesapi from '../../utils/MoviesAPI';
+import { serverErrorHandler } from '../../utils/errorHandler';
+import { SHORT_MOVIE_DURATION } from './../../utils/constants';
+import AuthRoute from './../AuthRoute/AuthRoute';
 
 function App() {
-  React.useState(false);
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
   const [infoTooltipData, setInfoTooltipData] = React.useState({});
 
   const [isRenderLoading, setIsRenderLoading] = React.useState(false);
 
   const [currentUser, setCurrentUser] = React.useState({});
-
-  const [selectedCard, setSelectedCard] = React.useState(null);
+  const [movies, setMovies] = React.useState([]);
   const [loggedIn, setLoggedIn] = React.useState(false);
-  const [error, setError] = React.useState('');
-
-  const [email, setEmail] = React.useState('');
+  const [serverResponseError, setServerResponseError] = React.useState('');
+  const [isSearched, setIsSearched] = React.useState(false);
+  const [savedMovies, setSavedMovies] = React.useState([]);
+  const [foundSavedMovies, setFoundSavedMovies] = React.useState([]);
+  const [foundMovies, setFoundMovies] = React.useState([]);
 
   const [isBurgerMenuOpen, setIsBurgerMenuOpen] = React.useState(false);
 
   const history = useHistory();
   const localToken = localStorage.getItem('token');
 
+  const findSavedMovies = (value = '', isShortsToggled) => {
+    if (!value && !isShortsToggled) {
+      getSavedMovies();
+      setFoundSavedMovies(savedMovies);
+    }
+    setFoundSavedMovies(
+      savedMovies.filter((movie) =>
+        isShortsToggled
+          ? (movie.nameRU.toLowerCase().includes(value.toLowerCase()) &&
+              movie.duration <= SHORT_MOVIE_DURATION) ||
+            (movie.nameEN.toLowerCase().includes(value.toLowerCase()) &&
+              movie.duration <= SHORT_MOVIE_DURATION)
+          : movie.nameRU.toLowerCase().includes(value.toLowerCase()) ||
+            movie.nameEN.toLowerCase().includes(value.toLowerCase())
+      )
+    );
+    setIsSearched(true);
+  };
+
+  const findMovies = (value = '', isShortsToggled) => {
+    if (!value && !isShortsToggled) {
+      getMoviesfromBeatFilm();
+      setFoundMovies(movies);
+    }
+    setFoundMovies(
+      movies.filter((movie) =>
+        isShortsToggled
+          ? (movie.nameRU.toLowerCase().includes(value.toLowerCase()) &&
+              movie.duration <= SHORT_MOVIE_DURATION) ||
+            (movie.nameEN.toLowerCase().includes(value.toLowerCase()) &&
+              movie.duration <= SHORT_MOVIE_DURATION)
+          : movie.nameRU.toLowerCase().includes(value.toLowerCase()) ||
+            movie.nameEN.toLowerCase().includes(value.toLowerCase())
+      )
+    );
+    localStorage.setItem('searchQuery', JSON.stringify(value));
+    localStorage.setItem('isShortsToggled', JSON.stringify(isShortsToggled));
+    setIsSearched(true);
+  };
+
+  const getMoviesfromBeatFilm = () => {
+    moviesapi
+      .getMovies()
+      .then((data) => {
+        setMovies(data);
+      })
+      .catch((e) => {
+        setServerResponseError(serverErrorHandler(e));
+      });
+  };
+
+  const getSavedMovies = () => {
+    mainapi
+      .getMovies()
+      .then((data) => {
+        setFoundSavedMovies(data);
+        setSavedMovies(data);
+      })
+      .catch((e) => {
+        setServerResponseError(serverErrorHandler(e));
+      });
+  };
+
   React.useEffect(() => {
     tokenCheck();
+  }, []);
 
-    // if (loggedIn) {
-    //   api
-    //     .getInitialCards()
-    //     .then((cards) => {
-    //       setCards(cards.reverse());
-    //     })
-    //     .catch((err) => console.log(err));
-
-    //   api
-    //     .getUserInfo()
-    //     .then((user) => {
-    //       setCurrentUser(user);
-    //     })
-    //     .catch((err) => console.log(err));
-    // }
+  React.useEffect(() => {
+    if (loggedIn) {
+      getSavedMovies();
+      getMoviesfromBeatFilm();
+    }
   }, [loggedIn]);
 
   const tokenCheck = () => {
@@ -72,7 +130,13 @@ function App() {
           setCurrentUser({ email: res.email, name: res.name });
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        signOut();
+      });
+  };
+  const resetError = () => {
+    setServerResponseError('');
   };
 
   const handleRegistration = (name, password, email) => {
@@ -84,17 +148,15 @@ function App() {
           image: 'success',
           message: 'Вы успешно зарегистрировались!',
         });
-        history.push('/signin');
+        setIsInfoTooltipOpen(true);
+      })
+      .then(() => {
+        handleAuthorization(password, email);
       })
       .catch((e) => {
-        console.log(e);
-        setInfoTooltipData({
-          image: 'fail',
-          message: 'Что-то пошло не так! Попробуйте ещё раз.',
-        });
+        setServerResponseError(serverErrorHandler(e));
       })
       .finally(() => {
-        setIsInfoTooltipOpen(true);
         setIsRenderLoading(false);
       });
   };
@@ -113,12 +175,7 @@ function App() {
         }
       })
       .catch((e) => {
-        console.log(e);
-        setInfoTooltipData({
-          image: 'fail',
-          message: 'Что-то пошло не так! Попробуйте ещё раз.',
-        });
-        setIsInfoTooltipOpen(true);
+        setServerResponseError(serverErrorHandler(e));
       })
       .finally(() => {
         setIsRenderLoading(false);
@@ -139,22 +196,28 @@ function App() {
       .signOut()
       .then(() => {
         setLoggedIn(false);
-        localStorage.removeItem('token');
-        setInfoTooltipData({
-          image: 'success',
-          message: 'Вы успешно вышли',
-        });
-        history.push('/signin');
+        localStorage.clear();
+        setSavedMovies([]);
+        setFoundSavedMovies([]);
+        setFoundMovies([]);
+        setMovies([]);
+        setIsSearched(false);
+
+        // setInfoTooltipData({
+        //   image: 'success',
+        //   message: 'Вы успешно вышли',
+        // });
+        // history.push('/');
       })
       .catch((e) => {
-        console.log(e);
-        setInfoTooltipData({
-          image: 'fail',
-          message: 'Что-то пошло не так! Попробуйте ещё раз.',
-        });
+        setServerResponseError(serverErrorHandler(e));
+        // setInfoTooltipData({
+        //   image: 'fail',
+        //   message: 'Что-то пошло не так! Попробуйте ещё раз.',
+        // });
       })
       .finally(() => {
-        setIsInfoTooltipOpen(true);
+        // setIsInfoTooltipOpen(true);
         setIsRenderLoading(false);
       });
   };
@@ -166,9 +229,14 @@ function App() {
       .then((res) => {
         setCurrentUser({ email: res.data.email, name: res.data.name });
         setIsRenderLoading(false);
+        setInfoTooltipData({
+          image: 'success',
+          message: 'Профиль успешно обновлен!',
+        });
+        setIsInfoTooltipOpen(true);
       })
-      .catch((err) => {
-        setError(err.message);
+      .catch((e) => {
+        setServerResponseError(serverErrorHandler(e));
       })
       .finally(() => setIsRenderLoading(false));
   };
@@ -181,6 +249,51 @@ function App() {
 
   const handleShowBurgerMenu = () => {
     setIsBurgerMenuOpen(true);
+  };
+
+  const handleDeleteMovie = (movie) => {
+    resetError();
+    setIsRenderLoading(true);
+
+    mainapi
+      .deleteMovie(movie)
+      .then(() => {
+        mainapi
+          .getMovies()
+          .then((data) => {
+            setSavedMovies(data);
+            setFoundSavedMovies(data);
+          })
+          .catch((e) => {
+            setServerResponseError(serverErrorHandler(e));
+          });
+      })
+      .catch((e) => {
+        setServerResponseError(serverErrorHandler(e));
+      })
+      .finally(() => setIsRenderLoading(false));
+  };
+
+  const handleSaveMovie = (movie) => {
+    resetError();
+    setIsRenderLoading(true);
+    mainapi
+      .saveMovie(movie)
+      .then(() => {
+        mainapi
+          .getMovies()
+          .then((data) => {
+            setSavedMovies(data);
+            setFoundSavedMovies(data);
+          })
+          .catch((e) => {
+            setServerResponseError(serverErrorHandler(e));
+          });
+      })
+      .catch((e) => {
+        setServerResponseError(serverErrorHandler(e));
+      })
+      .finally(() => setIsRenderLoading(false));
   };
 
   return (
@@ -198,37 +311,64 @@ function App() {
             <Route exact path='/'>
               <Main />
             </Route>
+
             <ProtectedRoute
               loggedIn={localToken}
               component={Movies}
+              movies={movies}
+              getMovies={getMoviesfromBeatFilm}
+              onDeleteMovie={handleDeleteMovie}
+              foundSavedMovies={foundSavedMovies}
+              findMovies={findMovies}
+              foundMovies={foundMovies}
+              onSaveMovie={handleSaveMovie}
+              serverResponseError={serverResponseError}
+              resetError={resetError}
+              isSearched={isSearched}
               path='/movies'
             ></ProtectedRoute>
+
             <ProtectedRoute
               loggedIn={localToken}
               path='/profile'
               component={Profile}
               onSignOut={signOut}
               onUpdateUser={handleUpdateUserInfo}
-              error={error}
+              serverResponseError={serverResponseError}
+              resetError={resetError}
             ></ProtectedRoute>
+
             <ProtectedRoute
               loggedIn={localToken}
               component={SavedMovies}
+              onDeleteMovie={handleDeleteMovie}
+              savedMovies={savedMovies}
+              serverResponseError={serverResponseError}
+              resetError={resetError}
+              findSavedMovies={findSavedMovies}
+              foundSavedMovies={foundSavedMovies}
+              isSearched={isSearched}
               path='/saved-movies'
             ></ProtectedRoute>
 
-            <Route path='/signup/'>
-              <Register
-                onRegister={handleRegistration}
-                isLoading={isRenderLoading}
-              />
-            </Route>
-            <Route path='/signin'>
-              <Login
-                onLogin={handleAuthorization}
-                isLoading={isRenderLoading}
-              />
-            </Route>
+            <AuthRoute
+              loggedIn={localToken}
+              component={Register}
+              onRegister={handleRegistration}
+              isLoading={isRenderLoading}
+              serverResponseError={serverResponseError}
+              resetError={resetError}
+              path='/signup/'
+            ></AuthRoute>
+            <AuthRoute
+              loggedIn={localToken}
+              component={Login}
+              path='/signin'
+              onLogin={handleAuthorization}
+              isLoading={isRenderLoading}
+              serverResponseError={serverResponseError}
+              resetError={resetError}
+            ></AuthRoute>
             <Route path='/404'>
               <NotFound onGoBack={handleGoBack} />
             </Route>
