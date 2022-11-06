@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react';
 
 const SearchForm = ({ findMovies }) => {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(
+    JSON.parse(localStorage.getItem('searchQuery')) || ''
+  );
   const [isShortsToggled, setIsShortsToggled] = useState(false);
 
   useEffect(() => {
     if (localStorage.getItem('searchQuery')) {
       setValue(JSON.parse(localStorage.getItem('searchQuery')));
     }
-    setValue('');
+
     setIsShortsToggled(JSON.parse(localStorage.getItem('isShortsToggled')));
   }, []);
 
@@ -34,7 +36,7 @@ const SearchForm = ({ findMovies }) => {
           onChange={handleInputChange}
           className='searchform__input'
           placeholder='Фильм'
-          value={value || ''}
+          value={value}
         ></input>
         <button
           onClick={handleFindMovies}
