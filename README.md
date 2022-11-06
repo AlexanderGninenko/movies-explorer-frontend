@@ -1,9 +1,5 @@
 # Movies Explorer | Frontend
 
-## Ссылка на Pull-request
-
-https://github.com/AlexanderGninenko/movies-explorer-frontend/pull/2
-
 ## Сайт доступен по адресу
 
 https://moviessearcher.nomorepartiesxyz.ru/
