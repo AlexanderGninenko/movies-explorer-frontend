@@ -93,6 +93,11 @@
 
     .techs__list {
         padding-bottom: 90px;
+        flex-wrap: wrap;
+    }
+
+    .techs__list-item {
+        margin: 0 10px 10px 0;
     }
 }
 

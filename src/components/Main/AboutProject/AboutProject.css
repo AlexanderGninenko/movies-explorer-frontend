@@ -104,10 +104,13 @@
     .about-project__description {
         font-size: 12px;
         line-height: 18px;
+        text-align: justify;
     }
 
     .about-project__subtitle {
         margin-bottom: 22px;
+        text-align: justify;
+        font-size: 19px;
     }
 
     .about-project__duration {

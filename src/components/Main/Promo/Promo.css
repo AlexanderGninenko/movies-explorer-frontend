@@ -72,14 +72,14 @@
 
     .promo__logo {
         position: static;
-        margin: 140px auto 48px auto;
+        margin: 100px auto 48px auto;
         width: 250px;
         height: 250px;
     }
 
     .promo__title {
         text-align: center;
-        font-size: 40px;
+        font-size: 38px;
         line-height: 50px;
         padding: 0 0 22px 0;
 

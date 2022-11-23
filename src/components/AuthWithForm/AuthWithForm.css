@@ -75,7 +75,7 @@
 }
 
 .auth__button {
-    margin: 69px 0 16px 0;
+    margin: 57px 0 16px 0;
     height: 50px;
     background: #3456F3;
     border-radius: 3px;
@@ -145,6 +145,17 @@
 
 .auth__input:last-of-type {
     margin-bottom: 10px;
+}
+
+@media screen and (max-width: 768px) {
+    .auth__form {
+        max-width: 300px;
+    }
+
+    .auth__logo {
+        margin: 20px 0 40px 0;
+    }
+
 }
 
 @media screen and (max-width: 320px) {

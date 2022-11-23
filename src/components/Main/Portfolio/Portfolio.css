@@ -68,7 +68,9 @@
     }
 
     .portfolio__list-item {
-        font-size: 28px;
+        font-size: 15px;
+        line-height: 35px;
+        padding: 0 0 10px 0;
     }
 }
 
