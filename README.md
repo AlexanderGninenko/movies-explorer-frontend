@@ -1,8 +1,4 @@
-# Movies Explorer | Frontend
-
-## Сайт доступен по адресу
-
-# Проект: Mesto. Backend
+# Проект: Movies Explorer. Backend
 
 ### Обзор
 * О проекте
