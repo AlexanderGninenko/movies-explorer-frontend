@@ -1,4 +1,4 @@
-# Проект: Movies Explorer. Backend
+# Проект: Movies Explorer. Frontend
 
 ### Обзор
 * О проекте
