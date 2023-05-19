@@ -1,4 +1,4 @@
-const BASE_URL = 'https://moviessearcher.nomorepartiesxyz.ru/api/movies';
+const BASE_URL = 'https://movies-explorer-api-2675.onrender.com/api/movies';
 // const BASE_URL = 'http://localhost:4010/api/movies';
 
 const checkResponse = (res) => {
