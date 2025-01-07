@@ -1,0 +1,102 @@
+.footer {
+    padding: 0 70px 20px 70px;
+}
+
+.footer__title {
+    margin: 79px 0 20px 0;
+    padding: 0 0 20px 0;
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 16px;
+    text-align: center;
+    color: #A0A0A0;
+    border-bottom: 1px solid #E8E8E8;
+}
+
+.footer__year {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 16px;
+    color: #000000;
+}
+
+.footer__container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.footer__links {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.footer__links-item {
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 16px;
+}
+
+.footer__links-item:first-child {
+    margin: 0 20px 0 0;
+    padding: 0;
+}
+
+.footer__link {
+    text-decoration: none;
+    color: #000000;
+}
+
+@media screen and (max-width: 768px) {
+    .footer {
+        padding: 0 30px 20px 30px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .footer {
+        padding: 0 10px 20px 10px;
+    }
+
+    .footer__title {
+        font-size: 12px;
+        line-height: 15px;
+        margin-bottom: 30px;
+    }
+
+    .footer__container {
+        display: flex;
+        flex-direction: column;
+        flex-flow: column-reverse;
+        text-align: center;
+    }
+
+    .footer__links {
+        display: block;
+    }
+
+    .footer__links-item {
+        font-size: 12px;
+        line-height: 15px;
+    }
+
+    .footer__links-item:first-child {
+        margin: 0;
+        padding-bottom: 12px;
+    }
+
+    .footer__year {
+        padding-top: 30px;
+        font-size: 12px;
+        line-height: 15px;
+    }
+}

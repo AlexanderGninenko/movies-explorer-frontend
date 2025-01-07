@@ -1,0 +1,136 @@
+.hamburger {
+    display: none;
+    background-image: url(../../../images/burger-menu.svg);
+    width: 44px;
+    height: 44px;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.hamburger__overlay {
+    display: none;
+    position: fixed;
+    width: 100%;
+    min-height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, .3);
+
+}
+
+.hamburger__overlay_opened {
+    display: flex;
+    position: fixed;
+    z-index: 1;
+}
+
+.hamburger__menu-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.hamburger__menu-wrapper {
+    width: 520px;
+    min-height: 100%;
+    background-color: #fff;
+    padding: 0;
+    margin: 0;
+    position: fixed;
+    right: -520px;
+    transition: .5s;
+    z-index: 2;
+    max-width: 100%;
+    top: -1px;
+}
+
+.hamburger__menu-wrapper_opened {
+    right: 0;
+    transition: .5s;
+}
+
+.hamburger__close-icon {
+    width: 22px;
+    height: 22px;
+    background-image: url(../../../images/close-icon.svg);
+    background-repeat: no-repeat;
+    background-color: transparent;
+    background-size: cover;
+    border: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 22px;
+    right: 22px;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.hamburger__menu-list-item {
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 22px;
+    text-align: center;
+    color: #000000;
+    padding: 0 0 4px 0;
+    margin: 0 0 22px 0;
+    text-decoration: none;
+}
+
+.hamburger__menu-list-item:hover {
+    opacity: .7;
+}
+
+.hamburger__menu-list-item:first-of-type {
+    margin-top: 159px;
+}
+
+.hamburger__menu-list-item:last-of-type {
+    position: fixed;
+    bottom: 90px;
+    margin: 0;
+    padding: 0;
+}
+
+.hamburger__active-link {
+    border-bottom: 2px solid #000;
+    text-decoration: none;
+
+}
+
+@media screen and (max-width: 768px) {
+    .hamburger {
+        display: flex;
+        position: fixed;
+        top: 15px;
+        right: 30px;
+        visibility: visible;
+        opacity: 1;
+        z-index: 1;
+    }
+}
+
+@media screen and (max-width: 320px) {
+
+    .hamburger__menu-list-item {
+        margin: 15px 0 0 0;
+        padding: 0 0 7px 0;
+    }
+
+    .hamburger__menu-list-item:first-of-type {
+        margin: 144px 0 0 0;
+    }
+
+    .hamburger {
+        right: 10px;
+    }
+
+    .hamburger__menu-wrapper {
+        width: 100%;
+    }
+}
